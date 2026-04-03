@@ -469,39 +469,72 @@
     max-width: 720px;
     line-height: 1.6;
   }
-  .welcome-grid {
+  .welcome-summary {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1.15fr 0.85fr;
     gap: 16px;
     margin-top: 22px;
   }
-  .welcome-card {
+  .welcome-panel {
     border: 1px solid var(--border);
     border-radius: 18px;
-    overflow: hidden;
     background: rgba(255,255,255,0.03);
+    padding: 18px;
   }
-  .welcome-card img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 2.6;
-    object-fit: cover;
-  }
-  .welcome-card-copy {
-    padding: 14px;
-  }
-  .welcome-card-copy strong {
+  .welcome-panel strong {
     display: block;
     font-size: 18px;
     color: var(--text);
     letter-spacing: 1px;
     text-transform: uppercase;
   }
-  .welcome-card-copy span {
+  .welcome-panel span {
     display: block;
-    margin-top: 4px;
-    font-size: 13px;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.6;
     color: var(--text-dim);
+  }
+  .welcome-points {
+    display: grid;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .welcome-point {
+    padding: 12px 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.02);
+  }
+  .welcome-point b {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .welcome-flow {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .welcome-flow-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+  }
+  .welcome-flow-item em {
+    font-style: normal;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .welcome-flow-item b {
+    color: var(--text);
+    font-weight: 700;
   }
   .welcome-side img {
     display: block;
@@ -993,7 +1026,7 @@
     .mission-copy {
       padding: 18px;
     }
-    .welcome-grid {
+    .welcome-summary {
       grid-template-columns: 1fr;
     }
     .phase-tabs {
@@ -1056,34 +1089,23 @@
       <section class="welcome-main">
         <div class="welcome-kicker">SSQ Tactical Board</div>
         <h2>Select a Role.<br>Play the Phase.</h2>
-        <p>Choose a numbered slot from the left sidebar to open a clean mission board with phased objectives, squad context, and the correct map for every stage of the match.</p>
-        <div class="welcome-grid">
-          <article class="welcome-card">
-            <img src="Squad_A.jpg" alt="A Squad roster">
-            <div class="welcome-card-copy">
-              <strong>A Squad</strong>
-              <span>Support, flex, reinforcement, lower-left control.</span>
+        <p>Pick a numbered role in the selector board above to load the exact mission for that player. The page then switches into a role-specific briefing with tabs, tactical maps, and chronological actions.</p>
+        <div class="welcome-summary">
+          <article class="welcome-panel">
+            <strong>How To Use It</strong>
+            <div class="welcome-points">
+              <div class="welcome-point"><b>1.</b> Choose your slot in the squad board.</div>
+              <div class="welcome-point"><b>2.</b> Open each phase tab to match your orders with the correct map.</div>
+              <div class="welcome-point"><b>3.</b> Follow the call timings and return to phase 2 positions after Core.</div>
             </div>
           </article>
-          <article class="welcome-card">
-            <img src="Squad_B.jpg" alt="B Squad roster">
-            <div class="welcome-card-copy">
-              <strong>B Squad</strong>
-              <span>Hammer team, base punishment, critical timing windows.</span>
-            </div>
-          </article>
-          <article class="welcome-card">
-            <img src="Squad_C.jpg" alt="C Squad roster">
-            <div class="welcome-card-copy">
-              <strong>C Squad</strong>
-              <span>Safe control, hospital hold, corridor anchor.</span>
-            </div>
-          </article>
-          <article class="welcome-card">
-            <img src="Squad_D.jpg" alt="D Squad roster">
-            <div class="welcome-card-copy">
-              <strong>D Squad</strong>
-              <span>High power, trap trigger, Core carrier pressure.</span>
+          <article class="welcome-panel">
+            <strong>Board Focus</strong>
+            <span>This board is built for fast in-game reading: role first, map second, actions third. It removes document noise and keeps only what players need during the match.</span>
+            <div class="welcome-flow">
+              <div class="welcome-flow-item"><b>Selector board</b><em>Squad + role</em></div>
+              <div class="welcome-flow-item"><b>Mission tabs</b><em>Phase 1 / 2 / Core / 3</em></div>
+              <div class="welcome-flow-item"><b>Map + tasks</b><em>Position + execution</em></div>
             </div>
           </article>
         </div>
@@ -1092,7 +1114,7 @@
         <img src="Canyon_clash.jpg" alt="Canyon Clash mode artwork">
         <div class="welcome-side-copy">
           <strong>Mission Flow</strong>
-          <span>Phase 1 setup, Phase 2 military base control, Core execution, then post-Core lockdown. The board keeps the squad banners, live role numbering, and tactical maps aligned in one place.</span>
+          <span>Phase 1 setup, Phase 2 military base control, Core execution, then post-Core lockdown. The board keeps role selection, timing windows, and tactical maps aligned in one place.</span>
         </div>
       </aside>
     </div>
