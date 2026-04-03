@@ -7,13 +7,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0e14;
-    --surface: #111923;
-    --surface2: #1a2433;
-    --border: #1e2d3d;
-    --text: #c8d6e5;
-    --text-dim: #5a7089;
-    --accent: #00e5ff;
+    --bg: #090609;
+    --bg-soft: #130d12;
+    --surface: rgba(19, 17, 22, 0.92);
+    --surface2: #241c24;
+    --surface3: #31242c;
+    --border: rgba(255, 187, 92, 0.14);
+    --text: #f4ece2;
+    --text-dim: #ab9f95;
+    --accent: #ffb347;
+    --accent-2: #f36b2d;
+    --accent-cool: #69e2ff;
     --green: #00e676;
     --green-bg: rgba(0,230,118,0.08);
     --green-border: rgba(0,230,118,0.25);
@@ -26,49 +30,169 @@
     --yellow: #ffab00;
     --yellow-bg: rgba(255,171,0,0.08);
     --yellow-border: rgba(255,171,0,0.25);
-    --phase-line: #1e2d3d;
+    --phase-line: rgba(255,255,255,0.08);
+    --shadow: 0 18px 70px rgba(0,0,0,0.35);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     font-family: 'Rajdhani', sans-serif;
-    background: var(--bg);
+    background:
+      radial-gradient(circle at top left, rgba(243,107,45,0.14), transparent 28%),
+      radial-gradient(circle at top right, rgba(105,226,255,0.12), transparent 22%),
+      linear-gradient(180deg, #110d12 0%, #090609 35%, #070507 100%);
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
+    position: relative;
+  }
+  body::before,
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -2;
+  }
+  body::before {
+    background:
+      linear-gradient(130deg, rgba(255,255,255,0.02), transparent 30%),
+      repeating-linear-gradient(
+        115deg,
+        rgba(255,255,255,0.018) 0,
+        rgba(255,255,255,0.018) 1px,
+        transparent 1px,
+        transparent 24px
+      );
+    opacity: 0.6;
+  }
+  body::after {
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.32) 100%);
+    z-index: -1;
   }
 
   /* ── HEADER ── */
   .header {
-    text-align: center;
-    padding: 32px 20px 24px;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(0,229,255,0.04) 0%, transparent 100%);
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(300px, 420px);
+    gap: 28px;
+    align-items: stretch;
+    padding: 32px 32px 18px;
+    max-width: 1480px;
+    margin: 0 auto;
     position: relative;
   }
   .header::before {
     content: '';
     position: absolute;
-    top: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 200px; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    inset: 0 32px auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,179,71,0.55), transparent);
+  }
+  .header-copy,
+  .header-visual {
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+  }
+  .header-copy {
+    padding: 28px;
+    backdrop-filter: blur(10px);
+  }
+  .header-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(255,179,71,0.1);
+    border: 1px solid rgba(255,179,71,0.18);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    text-transform: uppercase;
   }
   .header h1 {
-    font-size: 28px;
+    margin-top: 18px;
+    font-size: clamp(34px, 5vw, 62px);
     font-weight: 700;
     letter-spacing: 6px;
     text-transform: uppercase;
-    color: #fff;
+    color: #fff8ef;
+    line-height: 0.95;
   }
-  .header h1 span { color: var(--accent); }
+  .header h1 span {
+    color: var(--accent);
+    text-shadow: 0 0 18px rgba(255,179,71,0.25);
+  }
   .header p {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 12px;
+    margin-top: 16px;
+    max-width: 760px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
     color: var(--text-dim);
-    margin-top: 6px;
+    letter-spacing: 0.4px;
+  }
+  .header-tags,
+  .header-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .header-tag,
+  .header-stat {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 12px;
+    color: var(--text);
+    background: rgba(255,255,255,0.025);
+  }
+  .header-visual {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 280px;
+    background:
+      linear-gradient(180deg, rgba(6,5,8,0.2), rgba(6,5,8,0.82)),
+      url('Canyon_clash.jpg') center/cover no-repeat;
+  }
+  .header-visual::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 45%;
+    background: linear-gradient(180deg, transparent, rgba(9,6,9,0.9));
+  }
+  .header-visual-copy {
+    position: relative;
+    z-index: 1;
+    padding: 22px;
+  }
+  .header-visual-copy strong {
+    display: block;
+    font-size: 24px;
     letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff6ea;
+  }
+  .header-visual-copy span {
+    display: block;
+    margin-top: 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
   }
 
   /* ── STRATEGY BAR ── */
@@ -77,45 +201,119 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 12px;
-    padding: 16px 20px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    max-width: 1480px;
+    margin: 0 auto 20px;
+    padding: 0 32px 12px;
   }
   .strategy-pill {
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px;
-    padding: 5px 14px;
+    padding: 8px 14px;
     border: 1px solid var(--border);
-    border-radius: 20px;
-    color: var(--text-dim);
+    border-radius: 999px;
+    color: var(--text);
     letter-spacing: 1px;
+    background: rgba(255,255,255,0.028);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.015);
   }
 
   /* ── LAYOUT ── */
   .app {
     display: flex;
-    min-height: calc(100vh - 160px);
+    flex-direction: column;
+    max-width: 1480px;
+    margin: 0 auto 28px;
+    min-height: calc(100vh - 220px);
+    padding: 0 32px 32px;
+    gap: 24px;
   }
 
-  /* ── SIDEBAR ── */
+  /* ── SELECTOR BOARD ── */
   .sidebar {
-    width: 240px;
-    min-width: 240px;
-    border-right: 1px solid var(--border);
+    width: 100%;
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 24px;
     background: var(--surface);
-    padding: 0;
-    overflow-y: auto;
+    padding: 18px;
+    box-shadow: var(--shadow);
   }
-  .squad-group { border-bottom: 1px solid var(--border); }
+  .sidebar-intro {
+    margin-bottom: 18px;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255,179,71,0.09), rgba(255,255,255,0.02));
+  }
+  .sidebar-intro img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3.2;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .sidebar-kicker {
+    margin-top: 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .sidebar-title {
+    margin-top: 8px;
+    font-size: 24px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff6ea;
+  }
+  .sidebar-meta {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .selector-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .squad-group {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.02);
+  }
   .squad-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 18px 8px;
+    gap: 12px;
+    padding: 16px 16px 10px;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
+    text-align: left;
+  }
+  .squad-header-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    flex: 1;
+  }
+  .squad-name {
+    white-space: nowrap;
+    color: #fff6ea;
+  }
+  .squad-mini {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
   }
   .squad-header .dot {
     width: 8px; height: 8px;
@@ -131,106 +329,229 @@
   .squad-header.blue { color: var(--blue); }
   .squad-header.yellow { color: var(--yellow); }
   .squad-subtitle {
-    padding: 0 18px 6px;
+    padding: 0 16px 10px;
     font-family: 'Share Tech Mono', monospace;
     font-size: 10px;
     color: var(--text-dim);
     letter-spacing: 1px;
   }
+  .squad-banner {
+    padding: 0 16px 12px;
+  }
+  .squad-banner img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2.6;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .squad-power {
+    padding: 0 16px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .squad-members {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    padding: 0 16px 16px;
+  }
 
   .member-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
     width: 100%;
-    padding: 10px 18px;
-    border: none;
-    background: transparent;
+    padding: 10px 8px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
     color: var(--text);
     font-family: 'Rajdhani', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.15s;
-    text-align: left;
+    text-align: center;
     letter-spacing: 1px;
     position: relative;
   }
-  .member-btn::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: transparent;
-    transition: background 0.15s;
+  .member-btn:hover {
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-1px);
   }
-  .member-btn:hover { background: rgba(255,255,255,0.03); }
   .member-btn .tag {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 13px;
-    font-weight: 400;
-    padding: 2px 8px;
-    border-radius: 4px;
-    min-width: 36px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0;
+    border-radius: 0;
+    min-width: 0;
     text-align: center;
   }
-  .squad-group.green .tag { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-  .squad-group.red .tag { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
-  .squad-group.blue .tag { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
-  .squad-group.yellow .tag { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+  .squad-group.green .member-btn { border-color: var(--green-border); }
+  .squad-group.red .member-btn { border-color: var(--red-border); }
+  .squad-group.blue .member-btn { border-color: var(--blue-border); }
+  .squad-group.yellow .member-btn { border-color: var(--yellow-border); }
+  .squad-group.green .tag { color: var(--green); }
+  .squad-group.red .tag { color: var(--red); }
+  .squad-group.blue .tag { color: var(--blue); }
+  .squad-group.yellow .tag { color: var(--yellow); }
 
-  .member-btn.active { background: rgba(255,255,255,0.04); }
-  .squad-group.green .member-btn.active::before { background: var(--green); }
-  .squad-group.red .member-btn.active::before { background: var(--red); }
-  .squad-group.blue .member-btn.active::before { background: var(--blue); }
-  .squad-group.yellow .member-btn.active::before { background: var(--yellow); }
+  .member-btn.active {
+    background: rgba(255,255,255,0.08);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .squad-group.green .member-btn.active { background: var(--green-bg); }
+  .squad-group.red .member-btn.active { background: var(--red-bg); }
+  .squad-group.blue .member-btn.active { background: var(--blue-bg); }
+  .squad-group.yellow .member-btn.active { background: var(--yellow-bg); }
 
   /* ── MAIN CONTENT ── */
   .main {
     flex: 1;
-    padding: 28px 36px;
+    padding: 0;
     overflow-y: auto;
   }
 
   .welcome {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 60vh;
-    text-align: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 440px);
+    gap: 22px;
+    align-items: stretch;
     color: var(--text-dim);
   }
-  .welcome-icon {
-    font-size: 48px;
-    margin-bottom: 16px;
-    opacity: 0.3;
+  .welcome-main,
+  .welcome-side {
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .welcome-main {
+    padding: 26px;
+    background:
+      linear-gradient(180deg, rgba(255,179,71,0.08), rgba(255,255,255,0.02)),
+      rgba(19,17,22,0.94);
+  }
+  .welcome-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:
+      linear-gradient(180deg, rgba(105,226,255,0.08), rgba(255,255,255,0.02)),
+      rgba(19,17,22,0.94);
+  }
+  .welcome-kicker {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
   }
   .welcome h2 {
-    font-size: 20px;
-    font-weight: 600;
+    margin-top: 12px;
+    font-size: clamp(26px, 4vw, 48px);
+    font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 8px;
-    color: var(--text);
+    color: #fff6ea;
+    line-height: 0.95;
   }
   .welcome p {
-    font-size: 14px;
-    max-width: 320px;
+    margin-top: 14px;
+    font-size: 17px;
+    max-width: 720px;
     line-height: 1.6;
+  }
+  .welcome-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+  }
+  .welcome-card {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.03);
+  }
+  .welcome-card img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2.6;
+    object-fit: cover;
+  }
+  .welcome-card-copy {
+    padding: 14px;
+  }
+  .welcome-card-copy strong {
+    display: block;
+    font-size: 18px;
+    color: var(--text);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .welcome-card-copy span {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .welcome-side img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .welcome-side-copy {
+    padding: 22px;
+  }
+  .welcome-side-copy strong {
+    display: block;
+    font-size: 22px;
+    color: #fff6ea;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .welcome-side-copy span {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-dim);
   }
 
   /* ── MEMBER HEADER ── */
   .member-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 420px);
+    gap: 22px;
+    margin-bottom: 22px;
     animation: fadeSlide 0.3s ease;
   }
   @keyframes fadeSlide {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  .mission-copy,
+  .mission-roster {
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .mission-copy {
+    padding: 24px;
+    background:
+      linear-gradient(180deg, rgba(255,179,71,0.08), rgba(255,255,255,0.02)),
+      rgba(19,17,22,0.94);
   }
   .member-header .badge {
     font-family: 'Share Tech Mono', monospace;
@@ -240,17 +561,65 @@
     font-weight: 700;
   }
   .member-header .info h2 {
-    font-size: 18px;
+    margin-top: 16px;
+    font-size: clamp(24px, 3vw, 38px);
     font-weight: 600;
     letter-spacing: 2px;
     text-transform: uppercase;
   }
   .member-header .info p {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    color: var(--text-dim);
+    letter-spacing: 0.3px;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  .mission-kicker {
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--accent);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+  }
+  .mission-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .mission-fact {
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.025);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
     letter-spacing: 1px;
-    margin-top: 2px;
+  }
+  .mission-roster img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2.7;
+    object-fit: cover;
+  }
+  .mission-roster-copy {
+    padding: 18px;
+  }
+  .mission-roster-copy strong {
+    display: block;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fff6ea;
+  }
+  .mission-roster-copy span {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-dim);
   }
 
   /* ── TIMELINE ── */
@@ -551,6 +920,16 @@
   }
 
   /* ── RESPONSIVE ── */
+  @media (max-width: 1180px) {
+    .header,
+    .welcome,
+    .member-header {
+      grid-template-columns: 1fr;
+    }
+    .selector-grid {
+      grid-template-columns: 1fr;
+    }
+  }
   @media (max-width: 980px) {
     .phase-stage {
       grid-template-columns: 1fr;
@@ -561,30 +940,62 @@
     }
   }
   @media (max-width: 700px) {
-    .app { flex-direction: column; }
+    .header {
+      padding: 18px 16px 12px;
+      gap: 16px;
+    }
+    .header::before {
+      inset-inline: 16px;
+    }
+    .strategy-bar {
+      padding: 0 16px 12px;
+      justify-content: flex-start;
+    }
+    .app {
+      padding: 0 16px 24px;
+      gap: 16px;
+    }
     .sidebar {
       width: 100%;
       min-width: 100%;
-      border-right: none;
-      border-bottom: 1px solid var(--border);
-      max-height: 45vh;
+      padding: 10px;
     }
-    .squad-group {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      padding: 8px 12px;
-      gap: 4px;
+    .selector-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
-    .squad-header { padding: 6px 8px; font-size: 10px; width: auto; }
-    .squad-subtitle { display: none; }
-    .member-btn { width: auto; padding: 6px 10px; font-size: 13px; }
-    .member-btn::before { display: none; }
-    .member-btn .label { display: none; }
-    .main { padding: 20px 16px; }
+    .squad-header { padding: 12px 12px 8px; font-size: 10px; width: 100%; }
+    .squad-banner {
+      width: 100%;
+      padding: 0 12px 6px;
+    }
+    .squad-members {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0 12px 12px;
+    }
+    .member-btn { padding: 10px 4px; font-size: 12px; }
+    .main { padding: 0; }
     .strategy-bar { gap: 6px; padding: 10px; }
     .strategy-pill { font-size: 10px; padding: 4px 10px; }
-    .header h1 { font-size: 20px; letter-spacing: 4px; }
+    .header h1 { font-size: 34px; letter-spacing: 4px; }
+    .header-copy,
+    .header-visual,
+    .welcome-main,
+    .welcome-side,
+    .mission-copy,
+    .mission-roster,
+    .sidebar,
+    .phase-shell {
+      border-radius: 18px;
+    }
+    .welcome-main,
+    .mission-copy {
+      padding: 18px;
+    }
+    .welcome-grid {
+      grid-template-columns: 1fr;
+    }
     .phase-tabs {
       flex-wrap: wrap;
       padding: 10px;
@@ -607,8 +1018,28 @@
 <body>
 
 <div class="header">
-  <h1>Canyon <span>Clash</span></h1>
-  <p>WAR PLAN 1.0 — INTERACTIVE BRIEFING</p>
+  <div class="header-copy">
+    <div class="header-kicker">Alliance SSQ · Server 606 · Last Z: Survival Shooter</div>
+    <h1>Canyon <span>Clash</span><br>War Board</h1>
+    <p>Interactive tactical command board for SSQ. Select a role, track your phase-by-phase orders, and align your map position with the real squad setup.</p>
+    <div class="header-tags">
+      <div class="header-tag">4 squads</div>
+      <div class="header-tag">4 phases</div>
+      <div class="header-tag">Interactive mission tabs</div>
+      <div class="header-tag">Server 606 operation</div>
+    </div>
+    <div class="header-stats">
+      <div class="header-stat">Mode: Canyon Clash</div>
+      <div class="header-stat">Alliance: SSQ</div>
+      <div class="header-stat">Plan: War Plan 1.0</div>
+    </div>
+  </div>
+  <div class="header-visual">
+    <div class="header-visual-copy">
+      <strong>Canyon Clash</strong>
+      <span>Real roster banners, real phase maps, clean tactical UI for live calls.</span>
+    </div>
+  </div>
 </div>
 
 <div class="strategy-bar">
@@ -622,22 +1053,61 @@
   <aside class="sidebar" id="sidebar"></aside>
   <main class="main" id="main">
     <div class="welcome">
-      <div class="welcome-icon">⬡</div>
-      <h2>Select a member</h2>
-      <p>Click any callsign on the left to reveal their mission timeline and objectives.</p>
+      <section class="welcome-main">
+        <div class="welcome-kicker">SSQ Tactical Board</div>
+        <h2>Select a Role.<br>Play the Phase.</h2>
+        <p>Choose a numbered slot from the left sidebar to open a clean mission board with phased objectives, squad context, and the correct map for every stage of the match.</p>
+        <div class="welcome-grid">
+          <article class="welcome-card">
+            <img src="Squad_A.jpg" alt="A Squad roster">
+            <div class="welcome-card-copy">
+              <strong>A Squad</strong>
+              <span>Support, flex, reinforcement, lower-left control.</span>
+            </div>
+          </article>
+          <article class="welcome-card">
+            <img src="Squad_B.jpg" alt="B Squad roster">
+            <div class="welcome-card-copy">
+              <strong>B Squad</strong>
+              <span>Hammer team, base punishment, critical timing windows.</span>
+            </div>
+          </article>
+          <article class="welcome-card">
+            <img src="Squad_C.jpg" alt="C Squad roster">
+            <div class="welcome-card-copy">
+              <strong>C Squad</strong>
+              <span>Safe control, hospital hold, corridor anchor.</span>
+            </div>
+          </article>
+          <article class="welcome-card">
+            <img src="Squad_D.jpg" alt="D Squad roster">
+            <div class="welcome-card-copy">
+              <strong>D Squad</strong>
+              <span>High power, trap trigger, Core carrier pressure.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+      <aside class="welcome-side">
+        <img src="Canyon_clash.jpg" alt="Canyon Clash mode artwork">
+        <div class="welcome-side-copy">
+          <strong>Mission Flow</strong>
+          <span>Phase 1 setup, Phase 2 military base control, Core execution, then post-Core lockdown. The board keeps the squad banners, live role numbering, and tactical maps aligned in one place.</span>
+        </div>
+      </aside>
     </div>
   </main>
 </div>
 
 <script>
 const SQUADS = [
-  { id:'A', name:'A Squad', subtitle:'Support / Flex', color:'green',
+  { id:'A', name:'A Squad', subtitle:'Support / Flex', detail:'Lower-left economy control and fast reinforcement.', color:'green', power:'720,427,677', banner:'Squad_A.jpg',
     members:['A1','A2','A3','A4','A5'] },
-  { id:'B', name:'B Squad', subtitle:'Hammer Team — Critical', color:'red',
+  { id:'B', name:'B Squad', subtitle:'Hammer Team — Critical', detail:'Base punishment and timing-sensitive pressure windows.', color:'red', power:'730,741,385', banner:'Squad_B.jpg',
     members:['B1','B2','B3','B4','B5'] },
-  { id:'C', name:'C Squad', subtitle:'Safe Control', color:'blue',
+  { id:'C', name:'C Squad', subtitle:'Safe Control', detail:'Hospital lock, refinery stability, and escort discipline.', color:'blue', power:'547,159,455', banner:'Squad_C.jpg',
     members:['C1','C2','C3','C4','C5'] },
-  { id:'D', name:'D Squad', subtitle:'High Power — Orange', color:'yellow',
+  { id:'D', name:'D Squad', subtitle:'High Power — Orange', detail:'Shock force, Core pressure, and strongest-player hunting.', color:'yellow', power:'936,169,129', banner:'Squad_D.jpg',
     members:['D1','D2','D3','D4','D5'] },
 ];
 
@@ -902,34 +1372,46 @@ function getMemberData(id) {
 }
 
 function getSquadInfo(id) {
-  const squad = id[0];
-  const labels = {
-    A: { name:'A Squad', role:'Support / Flex', color:'green' },
-    B: { name:'B Squad', role:'Hammer Team', color:'red' },
-    C: { name:'C Squad', role:'Safe Control', color:'blue' },
-    D: { name:'D Squad', role:'High Power', color:'yellow' },
-  };
-  return labels[squad];
+  return SQUADS.find(sq => sq.id === id[0]);
 }
 
 // ── BUILD SIDEBAR ──
 const sidebar = document.getElementById('sidebar');
+sidebar.innerHTML = `
+  <section class="sidebar-intro">
+    <div class="sidebar-kicker">SSQ · Server 606</div>
+    <div class="sidebar-title">Role Selector</div>
+    <div class="sidebar-meta">Pick your numbered slot to open a cleaner mission board with tabs, maps, squad identity, and chronological tasks for each phase.</div>
+  </section>
+  <section class="selector-grid"></section>
+`;
+const selectorGrid = sidebar.querySelector('.selector-grid');
 SQUADS.forEach(sq => {
   const group = document.createElement('div');
   group.className = `squad-group ${sq.color}`;
   group.innerHTML = `
-    <div class="squad-header ${sq.color}"><span class="dot"></span>${sq.name}</div>
+    <div class="squad-header ${sq.color}">
+      <span class="dot"></span>
+      <div class="squad-header-copy">
+        <span class="squad-name">${sq.name}</span>
+        <span class="squad-mini">${sq.power}</span>
+      </div>
+    </div>
     <div class="squad-subtitle">${sq.subtitle}</div>
+    <div class="squad-banner"><img src="${sq.banner}" alt="${sq.name} roster"></div>
+    <div class="squad-power">Power ${sq.power}</div>
+    <div class="squad-members"></div>
   `;
+  const members = group.querySelector('.squad-members');
   sq.members.forEach(m => {
     const btn = document.createElement('button');
     btn.className = 'member-btn';
     btn.dataset.id = m;
-    btn.innerHTML = `<span class="tag">${m}</span><span class="label">${m}</span>`;
+    btn.innerHTML = `<span class="tag">${m}</span>`;
     btn.onclick = () => selectMember(m);
-    group.appendChild(btn);
+    members.appendChild(btn);
   });
-  sidebar.appendChild(group);
+  selectorGrid.appendChild(group);
 });
 
 // ── SELECT MEMBER ──
@@ -957,10 +1439,25 @@ function selectMember(id) {
 
   let html = `
     <div class="member-header">
-      <div class="badge" style="${badgeColors[info.color]}">${id}</div>
-      <div class="info">
-        <h2>${id} · ${info.name}</h2>
-        <p>${info.role} · Select your number on each phase map, then follow the tasks in order.</p>
+      <div class="mission-copy">
+        <div class="badge" style="${badgeColors[info.color]}">${id}</div>
+        <div class="info">
+          <div class="mission-kicker">Alliance SSQ · Server 606 · Last Z: Survival Shooter</div>
+          <h2>${id} · ${info.name}</h2>
+          <p>${info.subtitle}. ${info.detail} Select your number on each phase map, then execute the tasks in order.</p>
+          <div class="mission-facts">
+            <div class="mission-fact">Squad Power ${info.power}</div>
+            <div class="mission-fact">${info.subtitle}</div>
+            <div class="mission-fact">Mode Canyon Clash</div>
+          </div>
+        </div>
+      </div>
+      <div class="mission-roster">
+        <img src="${info.banner}" alt="${info.name} roster">
+        <div class="mission-roster-copy">
+          <strong>${info.name} Roster</strong>
+          <span>Use the squad banner for visual alignment, then switch through the phase tabs to match the correct tactical map and objective timing.</span>
+        </div>
       </div>
     </div>
   `;
