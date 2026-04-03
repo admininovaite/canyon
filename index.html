@@ -419,33 +419,15 @@
   }
 
   .welcome {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 440px);
-    gap: 22px;
-    align-items: stretch;
-    color: var(--text-dim);
-  }
-  .welcome-main,
-  .welcome-side {
     border: 1px solid var(--border);
     border-radius: 24px;
     background: var(--surface);
     box-shadow: var(--shadow);
-    overflow: hidden;
-  }
-  .welcome-main {
-    padding: 26px;
     background:
       linear-gradient(180deg, rgba(255,179,71,0.08), rgba(255,255,255,0.02)),
       rgba(19,17,22,0.94);
-  }
-  .welcome-side {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background:
-      linear-gradient(180deg, rgba(105,226,255,0.08), rgba(255,255,255,0.02)),
-      rgba(19,17,22,0.94);
+    padding: 22px;
+    color: var(--text-dim);
   }
   .welcome-kicker {
     font-family: 'Share Tech Mono', monospace;
@@ -464,98 +446,62 @@
     line-height: 0.95;
   }
   .welcome p {
-    margin-top: 14px;
-    font-size: 17px;
-    max-width: 720px;
+    margin-top: 10px;
+    font-size: 16px;
+    max-width: 760px;
     line-height: 1.6;
   }
-  .welcome-summary {
+  .welcome-empty {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 16px;
-    margin-top: 22px;
-  }
-  .welcome-panel {
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    background: rgba(255,255,255,0.03);
-    padding: 18px;
-  }
-  .welcome-panel strong {
-    display: block;
-    font-size: 18px;
-    color: var(--text);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-  .welcome-panel span {
-    display: block;
-    margin-top: 8px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-dim);
-  }
-  .welcome-points {
-    display: grid;
-    gap: 12px;
-    margin-top: 14px;
-  }
-  .welcome-point {
-    padding: 12px 14px;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 14px;
-    background: rgba(255,255,255,0.02);
-  }
-  .welcome-point b {
-    color: var(--text);
-    font-weight: 700;
-  }
-  .welcome-flow {
-    display: grid;
-    gap: 10px;
-    margin-top: 14px;
-  }
-  .welcome-flow-item {
-    display: flex;
+    grid-template-columns: minmax(0, 1.35fr) minmax(220px, 320px);
+    gap: 18px;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 11px 12px;
-    border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.02);
   }
-  .welcome-flow-item em {
-    font-style: normal;
+  .welcome-copy {
+    min-width: 0;
+  }
+  .welcome-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .welcome-chip {
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px;
-    color: var(--accent);
+    color: var(--text);
     letter-spacing: 1px;
   }
-  .welcome-flow-item b {
-    color: var(--text);
-    font-weight: 700;
+  .welcome-visual {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.02);
   }
-  .welcome-side img {
+  .welcome-visual img {
     display: block;
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 1.2;
     object-fit: cover;
   }
-  .welcome-side-copy {
-    padding: 22px;
+  .welcome-visual-copy {
+    padding: 16px;
   }
-  .welcome-side-copy strong {
+  .welcome-visual-copy strong {
     display: block;
-    font-size: 22px;
+    font-size: 16px;
     color: #fff6ea;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
   }
-  .welcome-side-copy span {
+  .welcome-visual-copy span {
     display: block;
-    margin-top: 10px;
-    font-size: 14px;
+    margin-top: 8px;
+    font-size: 13px;
     line-height: 1.6;
     color: var(--text-dim);
   }
@@ -955,7 +901,6 @@
   /* ── RESPONSIVE ── */
   @media (max-width: 1180px) {
     .header,
-    .welcome,
     .member-header {
       grid-template-columns: 1fr;
     }
@@ -1014,19 +959,18 @@
     .header h1 { font-size: 34px; letter-spacing: 4px; }
     .header-copy,
     .header-visual,
-    .welcome-main,
-    .welcome-side,
+    .welcome,
     .mission-copy,
     .mission-roster,
     .sidebar,
     .phase-shell {
       border-radius: 18px;
     }
-    .welcome-main,
+    .welcome,
     .mission-copy {
       padding: 18px;
     }
-    .welcome-summary {
+    .welcome-empty {
       grid-template-columns: 1fr;
     }
     .phase-tabs {
@@ -1086,37 +1030,26 @@
   <aside class="sidebar" id="sidebar"></aside>
   <main class="main" id="main">
     <div class="welcome">
-      <section class="welcome-main">
-        <div class="welcome-kicker">SSQ Tactical Board</div>
-        <h2>Select a Role.<br>Play the Phase.</h2>
-        <p>Pick a numbered role in the selector board above to load the exact mission for that player. The page then switches into a role-specific briefing with tabs, tactical maps, and chronological actions.</p>
-        <div class="welcome-summary">
-          <article class="welcome-panel">
-            <strong>How To Use It</strong>
-            <div class="welcome-points">
-              <div class="welcome-point"><b>1.</b> Choose your slot in the squad board.</div>
-              <div class="welcome-point"><b>2.</b> Open each phase tab to match your orders with the correct map.</div>
-              <div class="welcome-point"><b>3.</b> Follow the call timings and return to phase 2 positions after Core.</div>
-            </div>
-          </article>
-          <article class="welcome-panel">
-            <strong>Board Focus</strong>
-            <span>This board is built for fast in-game reading: role first, map second, actions third. It removes document noise and keeps only what players need during the match.</span>
-            <div class="welcome-flow">
-              <div class="welcome-flow-item"><b>Selector board</b><em>Squad + role</em></div>
-              <div class="welcome-flow-item"><b>Mission tabs</b><em>Phase 1 / 2 / Core / 3</em></div>
-              <div class="welcome-flow-item"><b>Map + tasks</b><em>Position + execution</em></div>
-            </div>
-          </article>
+      <section class="welcome-empty">
+        <div class="welcome-copy">
+          <div class="welcome-kicker">No Role Selected</div>
+          <h2>Select a Role Above</h2>
+          <p>Choose any slot from the squad selector to open that player’s tactical board with role-specific orders, phase tabs, and the correct map for each stage of the match.</p>
+          <div class="welcome-actions">
+            <div class="welcome-chip">1. Pick your role</div>
+            <div class="welcome-chip">2. Open the phase tabs</div>
+            <div class="welcome-chip">3. Match tasks to the map</div>
+            <div class="welcome-chip">4. Return to phase 3 after Core</div>
+          </div>
         </div>
+        <aside class="welcome-visual">
+          <img src="Canyon_clash.jpg" alt="Canyon Clash mode artwork">
+          <div class="welcome-visual-copy">
+            <strong>Phase Flow</strong>
+            <span>Phase 1 → Phase 2 → Core → Phase 3. The selector above is the entry point; this section only fills the space until a role is chosen.</span>
+          </div>
+        </aside>
       </section>
-      <aside class="welcome-side">
-        <img src="Canyon_clash.jpg" alt="Canyon Clash mode artwork">
-        <div class="welcome-side-copy">
-          <strong>Mission Flow</strong>
-          <span>Phase 1 setup, Phase 2 military base control, Core execution, then post-Core lockdown. The board keeps role selection, timing windows, and tactical maps aligned in one place.</span>
-        </div>
-      </aside>
     </div>
   </main>
 </div>
