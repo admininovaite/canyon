@@ -346,6 +346,34 @@
     border-radius: 12px;
     border: 1px solid rgba(255,255,255,0.08);
   }
+  .team-banners {
+    display: grid;
+    gap: 10px;
+    padding: 0 16px 12px;
+  }
+  .team-banner {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.03);
+  }
+  .team-banner-label {
+    display: block;
+    padding: 10px 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.02);
+  }
+  .team-banner img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2.6;
+    object-fit: cover;
+  }
   .squad-power {
     padding: 0 16px 14px;
     font-family: 'Share Tech Mono', monospace;
@@ -582,6 +610,12 @@
     width: 100%;
     aspect-ratio: 2.7;
     object-fit: cover;
+  }
+  .mission-roster .team-banners {
+    padding: 16px 16px 12px;
+  }
+  .mission-roster .team-banner img {
+    aspect-ratio: 2.35;
   }
   .mission-roster-copy {
     padding: 18px;
@@ -947,6 +981,14 @@
       width: 100%;
       padding: 0 12px 6px;
     }
+    .team-banners {
+      padding: 0 12px 8px;
+      gap: 8px;
+    }
+    .team-banner-label {
+      padding: 8px 10px;
+      font-size: 9px;
+    }
     .squad-members {
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 8px;
@@ -1056,13 +1098,29 @@
 
 <script>
 const SQUADS = [
-  { id:'A', name:'A Squad', subtitle:'Support / Flex', detail:'Lower-left economy control and fast reinforcement.', color:'green', power:'720,427,677', banner:'Squad_A.jpg',
+  { id:'A', name:'A Squad', subtitle:'Support / Flex', detail:'Lower-left economy control and fast reinforcement.', color:'green', power:'720,427,677',
+    teams:[
+      { label:'Team 1', image:'Team_1_Squad_A.jpg' },
+      { label:'Team 2', image:'Team_2_Squad_A.jpg' },
+    ],
     members:['A1','A2','A3','A4','A5'] },
-  { id:'B', name:'B Squad', subtitle:'Hammer Team — Critical', detail:'Base punishment and timing-sensitive pressure windows.', color:'red', power:'730,741,385', banner:'Squad_B.jpg',
+  { id:'B', name:'B Squad', subtitle:'Hammer Team — Critical', detail:'Base punishment and timing-sensitive pressure windows.', color:'red', power:'730,741,385',
+    teams:[
+      { label:'Team 1', image:'Team_1_Squad_B.jpg' },
+      { label:'Team 2', image:'Team_2_Squad_B.jpg' },
+    ],
     members:['B1','B2','B3','B4','B5'] },
-  { id:'C', name:'C Squad', subtitle:'Safe Control', detail:'Hospital lock, refinery stability, and escort discipline.', color:'blue', power:'547,159,455', banner:'Squad_C.jpg',
+  { id:'C', name:'C Squad', subtitle:'Safe Control', detail:'Hospital lock, refinery stability, and escort discipline.', color:'blue', power:'547,159,455',
+    teams:[
+      { label:'Team 1', image:'Team_1_Squad_C.jpg' },
+      { label:'Team 2', image:'Team_2_Squad_C.jpg' },
+    ],
     members:['C1','C2','C3','C4','C5'] },
-  { id:'D', name:'D Squad', subtitle:'High Power — Orange', detail:'Shock force, Core pressure, and strongest-player hunting.', color:'yellow', power:'936,169,129', banner:'Squad_D.jpg',
+  { id:'D', name:'D Squad', subtitle:'High Power — Orange', detail:'Shock force, Core pressure, and strongest-player hunting.', color:'yellow', power:'936,169,129',
+    teams:[
+      { label:'Team 1', image:'Team_1_Squad_D.jpg' },
+      { label:'Team 2', image:'Team_2_Squad_D.jpg' },
+    ],
     members:['D1','D2','D3','D4','D5'] },
 ];
 
@@ -1330,6 +1388,15 @@ function getSquadInfo(id) {
   return SQUADS.find(sq => sq.id === id[0]);
 }
 
+function renderTeamBanners(squad) {
+  return squad.teams.map(team => `
+    <div class="team-banner">
+      <span class="team-banner-label">${team.label}</span>
+      <img src="${team.image}" alt="${squad.name} ${team.label} roster">
+    </div>
+  `).join('');
+}
+
 // ── BUILD SIDEBAR ──
 const sidebar = document.getElementById('sidebar');
 sidebar.innerHTML = `
@@ -1353,7 +1420,7 @@ SQUADS.forEach(sq => {
       </div>
     </div>
     <div class="squad-subtitle">${sq.subtitle}</div>
-    <div class="squad-banner"><img src="${sq.banner}" alt="${sq.name} roster"></div>
+    <div class="team-banners">${renderTeamBanners(sq)}</div>
     <div class="squad-power">Power ${sq.power}</div>
     <div class="squad-members"></div>
   `;
@@ -1408,10 +1475,10 @@ function selectMember(id) {
         </div>
       </div>
       <div class="mission-roster">
-        <img src="${info.banner}" alt="${info.name} roster">
+        <div class="team-banners">${renderTeamBanners(info)}</div>
         <div class="mission-roster-copy">
-          <strong>${info.name} Roster</strong>
-          <span>Use the squad banner for visual alignment, then switch through the phase tabs to match the correct tactical map and objective timing.</span>
+          <strong>${info.name} Team Layout</strong>
+          <span>Use the Team 1 and Team 2 roster photos for visual alignment, then switch through the phase tabs to match the correct tactical map and objective timing.</span>
         </div>
       </div>
     </div>
