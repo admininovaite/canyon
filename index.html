@@ -572,32 +572,52 @@
     border-radius: 12px;
     border: 1px solid rgba(255,255,255,0.08);
   }
-  .team-banners {
-    display: grid;
-    gap: 10px;
+  .team-gallery {
     padding: 0 16px 12px;
   }
-  .team-banner {
+  .team-switcher {
+    display: inline-flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 4px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.03);
+  }
+  .team-switch {
+    border: none;
+    border-radius: 999px;
+    padding: 7px 12px;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .team-switch.active {
+    background: rgba(255,179,71,0.12);
+    color: #fff6ea;
+  }
+  .team-panels {
+    position: relative;
+  }
+  .team-panel {
+    display: none;
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 14px;
     overflow: hidden;
     background: rgba(255,255,255,0.03);
   }
-  .team-banner-label {
+  .team-panel.active {
     display: block;
-    padding: 10px 12px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 1.6px;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.02);
   }
-  .team-banner img {
+  .team-panel img {
     display: block;
     width: 100%;
-    aspect-ratio: 2.6;
+    aspect-ratio: 3.2;
     object-fit: cover;
   }
   .squad-power {
@@ -837,11 +857,11 @@
     aspect-ratio: 2.7;
     object-fit: cover;
   }
-  .mission-roster .team-banners {
+  .mission-roster .team-gallery {
     padding: 16px 16px 12px;
   }
-  .mission-roster .team-banner img {
-    aspect-ratio: 2.35;
+  .mission-roster .team-panel img {
+    aspect-ratio: 2.8;
   }
   .mission-roster-copy {
     padding: 18px;
@@ -1246,12 +1266,15 @@
       width: 100%;
       padding: 0 12px 6px;
     }
-    .team-banners {
+    .team-gallery {
       padding: 0 12px 8px;
-      gap: 8px;
     }
-    .team-banner-label {
-      padding: 8px 10px;
+    .team-switcher {
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .team-switch {
+      padding: 7px 10px;
       font-size: 9px;
     }
     .squad-members {
@@ -1553,6 +1576,27 @@ document.addEventListener('keydown', (event) => {
     closeTutorial();
   }
 });
+document.addEventListener('click', (event) => {
+  const switchButton = event.target.closest('.team-switch');
+  if (!switchButton) {
+    return;
+  }
+
+  const gallery = switchButton.closest('[data-team-gallery]');
+  if (!gallery) {
+    return;
+  }
+
+  const nextIndex = switchButton.dataset.teamIndex;
+  gallery.querySelectorAll('.team-switch').forEach(button => {
+    const isActive = button.dataset.teamIndex === nextIndex;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+  gallery.querySelectorAll('.team-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.dataset.teamPanel === nextIndex);
+  });
+});
 
 if (!localStorage.getItem(TUTORIAL_STORAGE_KEY)) {
   renderTutorialStep(0);
@@ -1813,13 +1857,29 @@ function getSquadInfo(id) {
   return SQUADS.find(sq => sq.id === id[0]);
 }
 
-function renderTeamBanners(squad) {
-  return squad.teams.map(team => `
-    <div class="team-banner">
-      <span class="team-banner-label">${team.label}</span>
-      <img src="${team.image}" alt="${squad.name} ${team.label} roster">
+function renderTeamGallery(squad) {
+  return `
+    <div class="team-gallery" data-team-gallery>
+      <div class="team-switcher" role="tablist" aria-label="${squad.name} team selector">
+        ${squad.teams.map((team, index) => `
+          <button
+            class="team-switch ${index === 0 ? 'active' : ''}"
+            type="button"
+            role="tab"
+            aria-selected="${index === 0 ? 'true' : 'false'}"
+            data-team-index="${index}"
+          >${team.label}</button>
+        `).join('')}
+      </div>
+      <div class="team-panels">
+        ${squad.teams.map((team, index) => `
+          <div class="team-panel ${index === 0 ? 'active' : ''}" data-team-panel="${index}">
+            <img src="${team.image}" alt="${squad.name} ${team.label} roster">
+          </div>
+        `).join('')}
+      </div>
     </div>
-  `).join('');
+  `;
 }
 
 // ── BUILD SIDEBAR ──
@@ -1845,7 +1905,7 @@ SQUADS.forEach(sq => {
       </div>
     </div>
     <div class="squad-subtitle">${sq.subtitle}</div>
-    <div class="team-banners">${renderTeamBanners(sq)}</div>
+    ${renderTeamGallery(sq)}
     <div class="squad-power">Power ${sq.power}</div>
     <div class="squad-members"></div>
   `;
@@ -1900,7 +1960,7 @@ function selectMember(id) {
         </div>
       </div>
       <div class="mission-roster">
-        <div class="team-banners">${renderTeamBanners(info)}</div>
+        ${renderTeamGallery(info)}
         <div class="mission-roster-copy">
           <strong>${info.name} Team Layout</strong>
           <span>Use the Team 1 and Team 2 roster photos for visual alignment, then switch through the phase tabs to match the correct tactical map and objective timing.</span>
