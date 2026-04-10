@@ -71,6 +71,232 @@
     background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.32) 100%);
     z-index: -1;
   }
+  body.tutorial-open {
+    overflow: hidden;
+  }
+
+  /* ── TUTORIAL ── */
+  .tutorial-trigger {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 40;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,179,71,0.24);
+    border-radius: 50%;
+    background: rgba(19,17,22,0.92);
+    color: var(--accent);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .tutorial-trigger:hover {
+    transform: translateY(-1px);
+    background: rgba(32,25,31,0.98);
+    border-color: rgba(255,179,71,0.4);
+  }
+  .tutorial-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(5,4,7,0.78);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+  }
+  .tutorial-overlay.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .tutorial-modal {
+    width: min(100%, 760px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    background:
+      linear-gradient(180deg, rgba(255,179,71,0.08), rgba(255,255,255,0.02)),
+      rgba(19,17,22,0.98);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .tutorial-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .tutorial-kicker {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .tutorial-title {
+    margin-top: 8px;
+    font-size: 28px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff8ef;
+  }
+  .tutorial-subtitle {
+    margin-top: 8px;
+    max-width: 520px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-dim);
+  }
+  .tutorial-close {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+    color: var(--text);
+    font-size: 22px;
+    cursor: pointer;
+  }
+  .tutorial-body {
+    padding: 24px;
+  }
+  .tutorial-progress {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .tutorial-dot {
+    flex: 1;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .tutorial-dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 18px rgba(255,179,71,0.25);
+  }
+  .tutorial-step-counter {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .tutorial-step {
+    display: none;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 20px;
+    align-items: stretch;
+    margin-top: 18px;
+  }
+  .tutorial-step.active {
+    display: grid;
+  }
+  .tutorial-step-copy {
+    padding: 22px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.03);
+  }
+  .tutorial-step-copy strong {
+    display: block;
+    font-size: 22px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #fff6ea;
+  }
+  .tutorial-step-copy p {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-dim);
+  }
+  .tutorial-step-copy .tutorial-hint {
+    margin-top: 14px;
+    display: inline-flex;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.025);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+  .tutorial-step-visual {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+  }
+  .tutorial-badge {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255,179,71,0.1);
+    border: 1px solid rgba(255,179,71,0.18);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .tutorial-visual-title {
+    font-size: 18px;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    color: #fff6ea;
+  }
+  .tutorial-visual-copy {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-dim);
+  }
+  .tutorial-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 22px;
+  }
+  .tutorial-action-group {
+    display: flex;
+    gap: 10px;
+  }
+  .tutorial-btn {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.03);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .tutorial-btn.primary {
+    background: rgba(255,179,71,0.12);
+    color: #fff6ea;
+    border-color: rgba(255,179,71,0.28);
+  }
 
   /* ── HEADER ── */
   .header {
@@ -952,6 +1178,45 @@
     }
   }
   @media (max-width: 700px) {
+    .tutorial-trigger {
+      top: 12px;
+      right: 12px;
+      width: 42px;
+      height: 42px;
+      font-size: 20px;
+    }
+    .tutorial-overlay {
+      padding: 12px;
+      align-items: flex-end;
+    }
+    .tutorial-modal {
+      border-radius: 20px;
+    }
+    .tutorial-head,
+    .tutorial-body {
+      padding: 18px;
+    }
+    .tutorial-title {
+      font-size: 22px;
+    }
+    .tutorial-step {
+      grid-template-columns: 1fr;
+    }
+    .tutorial-step-copy {
+      padding: 18px;
+    }
+    .tutorial-step-copy strong {
+      font-size: 18px;
+    }
+    .tutorial-actions,
+    .tutorial-action-group {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .tutorial-btn {
+      width: 100%;
+      text-align: center;
+    }
     .header {
       padding: 18px 16px 12px;
       gap: 16px;
@@ -1035,6 +1300,85 @@
 </style>
 </head>
 <body>
+
+<button class="tutorial-trigger" id="tutorial-trigger" type="button" aria-label="Open tutorial">?</button>
+
+<div class="tutorial-overlay" id="tutorial-overlay" aria-hidden="true">
+  <div class="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+    <div class="tutorial-head">
+      <div>
+        <div class="tutorial-kicker">Quick Tutorial</div>
+        <h2 class="tutorial-title" id="tutorial-title">How To Read Your Orders</h2>
+        <p class="tutorial-subtitle">Use this board in under ten seconds: find your squad, open your slot, then read the tasks for each phase.</p>
+      </div>
+      <button class="tutorial-close" id="tutorial-close" type="button" aria-label="Close tutorial">×</button>
+    </div>
+    <div class="tutorial-body">
+      <div class="tutorial-progress" id="tutorial-progress"></div>
+      <div class="tutorial-step-counter" id="tutorial-step-counter">Step 1 / 4</div>
+
+      <section class="tutorial-step active" data-step="0">
+        <div class="tutorial-step-copy">
+          <strong>Pick Your Squad</strong>
+          <p>Start in the selector board and locate your squad: A, B, C, or D. Each squad card now shows the Team 1 and Team 2 roster photos so you can verify the correct weekly composition.</p>
+          <div class="tutorial-hint">Check the squad card before opening your slot.</div>
+        </div>
+        <div class="tutorial-step-visual">
+          <div class="tutorial-badge">Step 1</div>
+          <div class="tutorial-visual-title">Squad Card</div>
+          <div class="tutorial-visual-copy">Use the roster photos to confirm your squad and this week’s team split before doing anything else.</div>
+        </div>
+      </section>
+
+      <section class="tutorial-step" data-step="1">
+        <div class="tutorial-step-copy">
+          <strong>Open Your Number</strong>
+          <p>Click your player slot such as A3, B5, or D2. This loads your tactical board and highlights your role-specific orders for the whole match.</p>
+          <div class="tutorial-hint">Your number is the entry point to all assigned tasks.</div>
+        </div>
+        <div class="tutorial-step-visual">
+          <div class="tutorial-badge">Step 2</div>
+          <div class="tutorial-visual-title">Player Slot</div>
+          <div class="tutorial-visual-copy">Each numbered button opens a different mission board. Pick only your own slot.</div>
+        </div>
+      </section>
+
+      <section class="tutorial-step" data-step="2">
+        <div class="tutorial-step-copy">
+          <strong>Switch By Phase</strong>
+          <p>Use the phase tabs to move through Phase 1, Phase 2, Core, and Phase 3. The tasks, timings, and map change automatically for the selected phase.</p>
+          <div class="tutorial-hint">Read the phase title first, then the timeline cards.</div>
+        </div>
+        <div class="tutorial-step-visual">
+          <div class="tutorial-badge">Step 3</div>
+          <div class="tutorial-visual-title">Phase Tabs</div>
+          <div class="tutorial-visual-copy">The board is chronological. Swap tabs as the match progresses instead of scrolling for everything at once.</div>
+        </div>
+      </section>
+
+      <section class="tutorial-step" data-step="3">
+        <div class="tutorial-step-copy">
+          <strong>Follow Map And Calls</strong>
+          <p>Match your tasks with the map position on the right, then watch the shot calls section for key timings. This is the quickest way to know where to move and when to rotate.</p>
+          <div class="tutorial-hint">Tasks + map + timing = your full order.</div>
+        </div>
+        <div class="tutorial-step-visual">
+          <div class="tutorial-badge">Step 4</div>
+          <div class="tutorial-visual-title">Execution</div>
+          <div class="tutorial-visual-copy">When in doubt, align the timeline with the map and listen for the active shot call timing.</div>
+        </div>
+      </section>
+
+      <div class="tutorial-actions">
+        <button class="tutorial-btn" id="tutorial-skip" type="button">Close</button>
+        <div class="tutorial-action-group">
+          <button class="tutorial-btn" id="tutorial-prev" type="button">Previous</button>
+          <button class="tutorial-btn primary" id="tutorial-next" type="button">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="header">
   <div class="header-copy">
@@ -1133,6 +1477,87 @@ const SHOT_CALLS = [
   { time:'18:30', text:'CORE SETUP — collapse' },
   { time:'20:00', text:'CORE LIVE — ALL IN' },
 ];
+
+const TUTORIAL_STORAGE_KEY = 'lastz-canyon-clash-tutorial-seen';
+const tutorialOverlay = document.getElementById('tutorial-overlay');
+const tutorialTrigger = document.getElementById('tutorial-trigger');
+const tutorialClose = document.getElementById('tutorial-close');
+const tutorialSkip = document.getElementById('tutorial-skip');
+const tutorialPrev = document.getElementById('tutorial-prev');
+const tutorialNext = document.getElementById('tutorial-next');
+const tutorialStepCounter = document.getElementById('tutorial-step-counter');
+const tutorialProgress = document.getElementById('tutorial-progress');
+const tutorialSteps = Array.from(document.querySelectorAll('.tutorial-step'));
+let activeTutorialStep = 0;
+
+tutorialProgress.innerHTML = tutorialSteps.map((_, index) =>
+  `<span class="tutorial-dot ${index === 0 ? 'active' : ''}" data-dot="${index}"></span>`
+).join('');
+
+function renderTutorialStep(index) {
+  activeTutorialStep = index;
+  tutorialSteps.forEach((step, stepIndex) => {
+    step.classList.toggle('active', stepIndex === index);
+  });
+  tutorialProgress.querySelectorAll('.tutorial-dot').forEach((dot, dotIndex) => {
+    dot.classList.toggle('active', dotIndex <= index);
+  });
+  tutorialStepCounter.textContent = `Step ${index + 1} / ${tutorialSteps.length}`;
+  tutorialPrev.disabled = index === 0;
+  tutorialPrev.style.opacity = index === 0 ? '0.45' : '1';
+  tutorialNext.textContent = index === tutorialSteps.length - 1 ? 'Finish' : 'Next';
+}
+
+function openTutorial(markSeen = false) {
+  if (markSeen) {
+    localStorage.setItem(TUTORIAL_STORAGE_KEY, '1');
+  }
+  tutorialOverlay.classList.add('open');
+  tutorialOverlay.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('tutorial-open');
+  renderTutorialStep(activeTutorialStep);
+}
+
+function closeTutorial() {
+  tutorialOverlay.classList.remove('open');
+  tutorialOverlay.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('tutorial-open');
+}
+
+tutorialTrigger.addEventListener('click', () => {
+  renderTutorialStep(0);
+  openTutorial(false);
+});
+
+tutorialClose.addEventListener('click', closeTutorial);
+tutorialSkip.addEventListener('click', closeTutorial);
+tutorialPrev.addEventListener('click', () => {
+  if (activeTutorialStep > 0) {
+    renderTutorialStep(activeTutorialStep - 1);
+  }
+});
+tutorialNext.addEventListener('click', () => {
+  if (activeTutorialStep < tutorialSteps.length - 1) {
+    renderTutorialStep(activeTutorialStep + 1);
+    return;
+  }
+  closeTutorial();
+});
+tutorialOverlay.addEventListener('click', (event) => {
+  if (event.target === tutorialOverlay) {
+    closeTutorial();
+  }
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && tutorialOverlay.classList.contains('open')) {
+    closeTutorial();
+  }
+});
+
+if (!localStorage.getItem(TUTORIAL_STORAGE_KEY)) {
+  renderTutorialStep(0);
+  openTutorial(true);
+}
 
 const PHASE_MAPS = {
   phase1: {
