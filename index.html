@@ -567,10 +567,12 @@
   .squad-banner img {
     display: block;
     width: 100%;
-    aspect-ratio: 2.6;
-    object-fit: cover;
+    height: clamp(90px, 10vw, 140px);
+    object-fit: contain;
+    object-position: center;
     border-radius: 12px;
     border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(7,5,7,0.9);
   }
   .team-gallery {
     padding: 0 16px 12px;
@@ -610,15 +612,21 @@
     border-radius: 14px;
     overflow: hidden;
     background: rgba(255,255,255,0.03);
+    min-height: clamp(96px, 11vw, 150px);
+    align-items: center;
+    justify-content: center;
   }
   .team-panel.active {
-    display: block;
+    display: flex;
   }
   .team-panel img {
     display: block;
     width: 100%;
-    aspect-ratio: 3.2;
-    object-fit: cover;
+    height: 100%;
+    max-height: clamp(96px, 11vw, 150px);
+    object-fit: contain;
+    object-position: center;
+    background: rgba(7,5,7,0.9);
   }
   .squad-power {
     padding: 0 16px 14px;
@@ -759,8 +767,10 @@
   .welcome-visual img {
     display: block;
     width: 100%;
-    aspect-ratio: 1.2;
-    object-fit: cover;
+    height: clamp(180px, 24vw, 320px);
+    object-fit: contain;
+    object-position: center;
+    background: rgba(7,5,7,0.9);
   }
   .welcome-visual-copy {
     padding: 16px;
@@ -854,14 +864,16 @@
   .mission-roster img {
     display: block;
     width: 100%;
-    aspect-ratio: 2.7;
-    object-fit: cover;
+    height: clamp(110px, 12vw, 170px);
+    object-fit: contain;
+    object-position: center;
+    background: rgba(7,5,7,0.9);
   }
   .mission-roster .team-gallery {
     padding: 16px 16px 12px;
   }
   .mission-roster .team-panel img {
-    aspect-ratio: 2.8;
+    max-height: clamp(110px, 12vw, 170px);
   }
   .mission-roster-copy {
     padding: 18px;
@@ -1467,26 +1479,26 @@
 const SQUADS = [
   { id:'A', name:'A Squad', subtitle:'Support / Flex', detail:'Lower-left economy control and fast reinforcement.', color:'green', power:'720,427,677',
     teams:[
-      { label:'Team 1', image:'Team_1_Squad_A.jpg' },
-      { label:'Team 2', image:'Team_2_Squad_A.jpg' },
+      { label:'Team 1', image:'Team_1_Squad_A.png' },
+      { label:'Team 2', image:'Team_2_Squad_A.png' },
     ],
     members:['A1','A2','A3','A4','A5'] },
   { id:'B', name:'B Squad', subtitle:'Hammer Team — Critical', detail:'Base punishment and timing-sensitive pressure windows.', color:'red', power:'730,741,385',
     teams:[
-      { label:'Team 1', image:'Team_1_Squad_B.jpg' },
-      { label:'Team 2', image:'Team_2_Squad_B.jpg' },
+      { label:'Team 1', image:'Team_1_Squad_B.png' },
+      { label:'Team 2', image:'Team_2_Squad_B.png' },
     ],
     members:['B1','B2','B3','B4','B5'] },
   { id:'C', name:'C Squad', subtitle:'Safe Control', detail:'Hospital lock, refinery stability, and escort discipline.', color:'blue', power:'547,159,455',
     teams:[
-      { label:'Team 1', image:'Team_1_Squad_C.jpg' },
-      { label:'Team 2', image:'Team_2_Squad_C.jpg' },
+      { label:'Team 1', image:'Team_1_Squad_C.png' },
+      { label:'Team 2', image:'Team_2_Squad_C.png' },
     ],
     members:['C1','C2','C3','C4','C5'] },
   { id:'D', name:'D Squad', subtitle:'High Power — Orange', detail:'Shock force, Core pressure, and strongest-player hunting.', color:'yellow', power:'936,169,129',
     teams:[
       { label:'Team 1', image:'Team_1_Squad_D.jpg' },
-      { label:'Team 2', image:'Team_2_Squad_D.jpg' },
+      { label:'Team 2', image:'Team_2_Squad_D.png' },
     ],
     members:['D1','D2','D3','D4','D5'] },
 ];
