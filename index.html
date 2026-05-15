@@ -1416,6 +1416,531 @@
       min-height: 0;
     }
   }
+
+  /* ─────────── NEW UI (map-centric) ─────────── */
+  .app-v2 {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .squads-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .squad-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .squad-chip .chip-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .squad-chip .chip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+  .squad-chip.green .chip-dot { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .squad-chip.red   .chip-dot { background: var(--red);   box-shadow: 0 0 8px var(--red); }
+  .squad-chip.blue  .chip-dot { background: var(--blue);  box-shadow: 0 0 8px var(--blue); }
+  .squad-chip.yellow .chip-dot { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+  .squad-chip.green .chip-head span:last-child { color: var(--green); }
+  .squad-chip.red .chip-head span:last-child { color: var(--red); }
+  .squad-chip.blue .chip-head span:last-child { color: var(--blue); }
+  .squad-chip.yellow .chip-head span:last-child { color: var(--yellow); }
+  .squad-chip .chip-teams {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .squad-chip .team-cell {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    background: rgba(7,5,7,0.9);
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: zoom-in;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .squad-chip .team-cell:hover {
+    border-color: rgba(0,229,255,0.32);
+  }
+  .squad-chip .team-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .squad-chip .team-cell .team-tag {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .squad-chip .chip-slots-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .squad-chip .chip-slots {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .squad-chip .slot-tag {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 6px 4px;
+    min-height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+  .squad-chip.green  .slot-tag { border-color: var(--green-border);  color: var(--green); }
+  .squad-chip.red    .slot-tag { border-color: var(--red-border);    color: var(--red); }
+  .squad-chip.blue   .slot-tag { border-color: var(--blue-border);   color: var(--blue); }
+  .squad-chip.yellow .slot-tag { border-color: var(--yellow-border); color: var(--yellow); }
+
+  /* Board */
+  .board {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .board-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(7,5,7,0.95);
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .board-tabs::-webkit-scrollbar { height: 0; display: none; }
+  .board-tab {
+    flex: 0 0 auto;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-dim);
+    padding: 10px 18px;
+    min-height: 44px;
+    border-radius: 999px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .board-tab:hover {
+    color: var(--text);
+    border-color: rgba(0,229,255,0.22);
+  }
+  .board-tab.active {
+    color: var(--accent);
+    border-color: rgba(0,229,255,0.32);
+    background: rgba(0,229,255,0.08);
+  }
+  .board-stage {
+    display: none;
+    position: relative;
+    padding: 14px;
+  }
+  .board-stage.active { display: block; }
+  .board-map-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .board-map {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    user-select: none;
+  }
+  .hotspot-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .hotspot {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    color: transparent;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  /* In admin "edit positions" mode, hotspots are visible & draggable */
+  body.edit-positions .hotspot {
+    background: rgba(255, 179, 71, 0.22);
+    border: 2px solid #ffb347;
+    color: #fff6ea;
+    cursor: grab;
+    box-shadow: 0 0 12px rgba(255,179,71,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+  }
+  body.edit-positions .hotspot.green  { border-color: var(--green); background: var(--green-bg); }
+  body.edit-positions .hotspot.red    { border-color: var(--red); background: var(--red-bg); }
+  body.edit-positions .hotspot.blue   { border-color: var(--blue); background: var(--blue-bg); }
+  body.edit-positions .hotspot.yellow { border-color: var(--yellow); background: var(--yellow-bg); }
+  body.edit-positions .hotspot:active { cursor: grabbing; }
+  body.edit-positions .hotspot.dragging { z-index: 100; transform: translate(-50%, -50%) scale(1.1); }
+  body.edit-positions .board-map { cursor: crosshair; }
+
+  /* Bottom sheet */
+  .task-sheet {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 80;
+    max-height: 70vh;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    box-shadow: 0 -20px 40px rgba(0,0,0,0.5);
+    transform: translateY(110%);
+    transition: transform 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+  }
+  .task-sheet.open {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .sheet-handle {
+    width: 44px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.2);
+    margin: 10px auto 4px;
+  }
+  .sheet-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sheet-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    min-width: 44px;
+    text-align: center;
+  }
+  .sheet-title-block {
+    flex: 1;
+    min-width: 0;
+  }
+  .sheet-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .sheet-subtitle {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    margin-top: 2px;
+  }
+  .sheet-close {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    flex: 0 0 auto;
+  }
+  .sheet-body {
+    overflow-y: auto;
+    padding: 14px 16px max(24px, env(safe-area-inset-bottom));
+    flex: 1;
+  }
+  .sheet-body .tl-event {
+    margin-bottom: 12px;
+  }
+  .sheet-empty {
+    padding: 30px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .task-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 79;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .task-sheet-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Hide old layout when new UI is mounted */
+  body.new-ui .app { display: none; }
+  body.new-ui .welcome { display: none; }
+
+  /* Roster check banner — aligned with header style */
+  .roster-panel {
+    background:
+      radial-gradient(circle at top left, rgba(0,229,255,0.08), transparent 50%),
+      var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+  .roster-panel.open {
+    border-color: rgba(0,229,255,0.22);
+  }
+  .roster-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .roster-bar:hover { background: rgba(0,229,255,0.04); }
+  .roster-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+  }
+  .roster-bar-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.22);
+    color: var(--accent);
+    font-size: 14px;
+    flex: 0 0 auto;
+    transition: all 0.2s ease;
+  }
+  .roster-panel.verified .roster-bar-icon {
+    background: rgba(80,234,179,0.10);
+    border-color: rgba(80,234,179,0.32);
+    color: var(--green);
+  }
+  .roster-bar-kicker {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+  .roster-panel.verified .roster-bar-kicker { color: var(--green); }
+  .roster-bar-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .roster-bar-hint {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .roster-bar-toggle {
+    background: rgba(0,229,255,0.06);
+    border: 1px solid rgba(0,229,255,0.24);
+    color: var(--accent);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    flex: 0 0 auto;
+    transition: all 0.15s ease;
+  }
+  .roster-bar-toggle:hover {
+    background: rgba(0,229,255,0.14);
+    box-shadow: 0 0 0 1px rgba(0,229,255,0.22);
+  }
+  .roster-body {
+    border-top: 1px solid var(--border);
+    padding: 14px;
+    display: none;
+    background:
+      linear-gradient(180deg, rgba(0,229,255,0.025), transparent 30%);
+  }
+  .roster-panel.open .roster-body { display: block; }
+  .roster-panel.open .roster-bar-toggle::after { content: ' ▴'; }
+  .roster-panel:not(.open) .roster-bar-toggle::after { content: ' ▾'; }
+  .roster-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+  }
+  .roster-verified-btn {
+    background: rgba(80,234,179,0.10);
+    border: 1px solid rgba(80,234,179,0.32);
+    color: var(--green);
+    padding: 9px 18px;
+    border-radius: 999px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .roster-verified-btn:hover {
+    background: rgba(80,234,179,0.18);
+    box-shadow: 0 0 0 1px rgba(80,234,179,0.32);
+  }
+  .roster-panel.open .squads-strip { display: grid; }
+  .roster-panel:not(.open) .squads-strip { display: none; }
+
+  /* Responsive — new UI */
+  @media (max-width: 900px) {
+    .squads-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .squads-strip { grid-template-columns: 1fr; }
+    .squad-chip .team-cell { aspect-ratio: 16/10; }
+  }
+  @media (max-width: 520px) {
+    .board-stage { padding: 8px; }
+    .board-tabs { padding: 8px 10px; gap: 6px; }
+    .board-tab { padding: 9px 14px; font-size: 10px; }
+    .squad-chip { padding: 8px; }
+    .squad-chip .chip-head { font-size: 9px; }
+  }
+
+  /* Image preview modal */
+  .img-preview-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(7,5,7,0.92);
+    backdrop-filter: blur(6px);
+    z-index: 90;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    animation: fadeIn 0.2s ease;
+  }
+  .img-preview-overlay.open { display: flex; }
+  .img-preview-box {
+    position: relative;
+    max-width: min(900px, 100%);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .img-preview-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+  }
+  .img-preview-header .preview-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .img-preview-header .preview-spacer { flex: 1; }
+  .img-preview-close {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .img-preview-img {
+    display: block;
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: #000;
+    object-fit: contain;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 </style>
 </head>
 <body>
@@ -1428,7 +1953,7 @@
       <div>
         <div class="tutorial-kicker">Quick Tutorial</div>
         <h2 class="tutorial-title" id="tutorial-title">How To Read Your Orders</h2>
-        <p class="tutorial-subtitle">Use this board in under ten seconds: find your squad, open your slot, then read the tasks for each phase.</p>
+        <p class="tutorial-subtitle">Use this board in under ten seconds: verify your slot, pick the active phase, tap your number on the map.</p>
       </div>
       <button class="tutorial-close" id="tutorial-close" type="button" aria-label="Close tutorial">×</button>
     </div>
@@ -1438,53 +1963,53 @@
 
       <section class="tutorial-step active" data-step="0">
         <div class="tutorial-step-copy">
-          <strong>Pick Your Squad</strong>
-          <p>Start in the selector board and locate your squad: A, B, C, or D. Each squad card now shows the Team 1 and Team 2 roster photos so you can verify the correct weekly composition.</p>
-          <div class="tutorial-hint">Check the squad card before opening your slot.</div>
+          <strong>Verify Your Slot</strong>
+          <p>Open the <em>Roster Check</em> panel at the top and confirm which squad and team you belong to this week. Tap a team image to enlarge it and read player positions clearly.</p>
+          <div class="tutorial-hint">Hit “Slot verified” once you've checked — the panel collapses for the rest of the session.</div>
         </div>
         <div class="tutorial-step-visual">
           <div class="tutorial-badge">Step 1</div>
-          <div class="tutorial-visual-title">Squad Card</div>
-          <div class="tutorial-visual-copy">Use the roster photos to confirm your squad and this week’s team split before doing anything else.</div>
+          <div class="tutorial-visual-title">Roster Check</div>
+          <div class="tutorial-visual-copy">Team 1 / Team 2 screenshots show exactly which slot you play. Always confirm before the match starts.</div>
         </div>
       </section>
 
       <section class="tutorial-step" data-step="1">
         <div class="tutorial-step-copy">
-          <strong>Open Your Number</strong>
-          <p>Click your player slot such as A3, B5, or D2. This loads your tactical board and highlights your role-specific orders for the whole match.</p>
-          <div class="tutorial-hint">Your number is the entry point to all assigned tasks.</div>
+          <strong>Pick The Active Phase</strong>
+          <p>The phase tabs at the top of the map switch through Phase 1, Phase 2, Core and Phase 3. The map and every player position update automatically when you switch.</p>
+          <div class="tutorial-hint">The tabs stay pinned to the top as you scroll — keep them handy mid-match.</div>
         </div>
         <div class="tutorial-step-visual">
           <div class="tutorial-badge">Step 2</div>
-          <div class="tutorial-visual-title">Player Slot</div>
-          <div class="tutorial-visual-copy">Each numbered button opens a different mission board. Pick only your own slot.</div>
+          <div class="tutorial-visual-title">Phase Tabs</div>
+          <div class="tutorial-visual-copy">Match progression is chronological. Switch tabs as the timer advances rather than scrolling.</div>
         </div>
       </section>
 
       <section class="tutorial-step" data-step="2">
         <div class="tutorial-step-copy">
-          <strong>Switch By Phase</strong>
-          <p>Use the phase tabs to move through Phase 1, Phase 2, Core, and Phase 3. The tasks, timings, and map change automatically for the selected phase.</p>
-          <div class="tutorial-hint">Read the phase title first, then the timeline cards.</div>
+          <strong>Tap Your Number On The Map</strong>
+          <p>Every painted number on the map is a tappable hotspot. Tap your slot (A3, B5, D2…) and a panel slides up with your tasks for the currently active phase.</p>
+          <div class="tutorial-hint">No more scrolling through a long task list — only your role's orders for the phase you're in.</div>
         </div>
         <div class="tutorial-step-visual">
           <div class="tutorial-badge">Step 3</div>
-          <div class="tutorial-visual-title">Phase Tabs</div>
-          <div class="tutorial-visual-copy">The board is chronological. Swap tabs as the match progresses instead of scrolling for everything at once.</div>
+          <div class="tutorial-visual-title">Map Hotspots</div>
+          <div class="tutorial-visual-copy">Numbers move between phases because positions move in the game. The map always shows the right setup.</div>
         </div>
       </section>
 
       <section class="tutorial-step" data-step="3">
         <div class="tutorial-step-copy">
-          <strong>Follow Map And Calls</strong>
-          <p>Match your tasks with the map position on the right, then watch the shot calls section for key timings. This is the quickest way to know where to move and when to rotate.</p>
-          <div class="tutorial-hint">Tasks + map + timing = your full order.</div>
+          <strong>Execute &amp; Listen For Calls</strong>
+          <p>Follow the tasks in order, watch the timestamps, and listen for the shot calls (Captain up, Core setup, ALL IN…). When a phase ends, switch the tab and tap your number again.</p>
+          <div class="tutorial-hint">Tasks + map position + shot call timing = your full order.</div>
         </div>
         <div class="tutorial-step-visual">
           <div class="tutorial-badge">Step 4</div>
           <div class="tutorial-visual-title">Execution</div>
-          <div class="tutorial-visual-copy">When in doubt, align the timeline with the map and listen for the active shot call timing.</div>
+          <div class="tutorial-visual-copy">Close the task panel anytime by tapping the backdrop, swiping down, or pressing Escape.</div>
         </div>
       </section>
 
@@ -1503,26 +2028,27 @@
   <div class="header-copy">
     <div class="header-kicker">Alliance BSBY · Server 606 · Last Z: Survival Shooter</div>
     <h1>Canyon <span>Clash</span><br>War Board</h1>
-    <p>Interactive tactical command board for BSBY. Select a role, track your phase-by-phase orders, and align your map position with the real squad setup.</p>
+    <p>Interactive tactical command board for BSBY. Verify your slot in the weekly roster, switch to the active phase, then tap your number on the map to reveal your tasks.</p>
     <div class="header-tags">
-      <div class="header-tag">4 squads</div>
+      <div class="header-tag">4 squads · 20 slots</div>
       <div class="header-tag">4 phases</div>
-      <div class="header-tag">Interactive mission tabs</div>
+      <div class="header-tag">Tap-to-reveal tasks</div>
       <div class="header-tag">Server 606 operation</div>
     </div>
     <div class="header-stats">
       <div class="header-stat">Mode: Canyon Clash</div>
       <div class="header-stat">Alliance: BSBY</div>
       <div class="header-stat">Plan: War Plan 1.0</div>
-      <button type="button" class="edit-toggle" id="edit-squads-toggle" title="Activer l'édition des images de squad" hidden>✎ Edit Squads</button>
-      <button type="button" class="edit-toggle" id="export-squads-btn" title="Exporter squads.json pour le déployer aux membres" hidden>⬇ Export squads.json</button>
-      <button type="button" class="edit-toggle" id="clear-squads-btn" title="Effacer mes éditions locales" hidden>↺ Clear my edits</button>
+      <button type="button" class="edit-toggle" id="edit-squads-toggle" title="Toggle squad screenshot editing" hidden>✎ Edit Squads</button>
+      <button type="button" class="edit-toggle" id="edit-positions-toggle" title="Toggle map hotspot positioning" hidden>◎ Edit Positions</button>
+      <button type="button" class="edit-toggle" id="export-squads-btn" title="Export squads.json to deploy to members" hidden>⬇ Export squads.json</button>
+      <button type="button" class="edit-toggle" id="clear-squads-btn" title="Clear local screenshot edits" hidden>↺ Clear my edits</button>
     </div>
   </div>
   <div class="header-visual">
     <div class="header-visual-copy">
       <strong>Canyon Clash</strong>
-      <span>Real roster banners, real phase maps, clean tactical UI for live calls.</span>
+      <span>Verify · Phase · Tap. A tactical board built around the map, not menus.</span>
     </div>
   </div>
 </div>
@@ -1534,32 +2060,53 @@
   <div class="strategy-pill">Win through positioning</div>
 </div>
 
-<div class="app">
-  <aside class="sidebar" id="sidebar"></aside>
-  <main class="main" id="main">
-    <div class="welcome">
-      <section class="welcome-empty">
-        <div class="welcome-copy">
-          <div class="welcome-kicker">No Role Selected</div>
-          <h2>Select a Role Above</h2>
-          <p>Choose any slot from the squad selector to open that player’s tactical board with role-specific orders, phase tabs, and the correct map for each stage of the match.</p>
-          <div class="welcome-actions">
-            <div class="welcome-chip">1. Pick your role</div>
-            <div class="welcome-chip">2. Open the phase tabs</div>
-            <div class="welcome-chip">3. Match tasks to the map</div>
-            <div class="welcome-chip">4. Return to phase 3 after Core</div>
-          </div>
+<div class="app-v2">
+  <section class="roster-panel" id="roster-panel">
+    <div class="roster-bar" id="roster-bar" role="button" tabindex="0" aria-expanded="false">
+      <div class="roster-bar-left">
+        <span class="roster-bar-icon" id="roster-bar-icon" aria-hidden="true">⬢</span>
+        <div>
+          <div class="roster-bar-kicker" id="roster-bar-kicker">Step 1 · Roster Check</div>
+          <div class="roster-bar-title" id="roster-bar-title">Verify your slot</div>
+          <div class="roster-bar-hint" id="roster-bar-hint">Confirm Team 1 / Team 2 for this week</div>
         </div>
-        <aside class="welcome-visual">
-          <img src="Canyon_clash.jpg" alt="Canyon Clash mode artwork">
-          <div class="welcome-visual-copy">
-            <strong>Phase Flow</strong>
-            <span>Phase 1 → Phase 2 → Core → Phase 3. The selector above is the entry point; this section only fills the space until a role is chosen.</span>
-          </div>
-        </aside>
-      </section>
+      </div>
+      <button type="button" class="roster-bar-toggle" id="roster-bar-toggle" aria-label="Toggle roster">Show</button>
     </div>
-  </main>
+    <div class="roster-body">
+      <div class="squads-strip" id="squads-strip"></div>
+      <div class="roster-actions">
+        <button type="button" class="roster-verified-btn" id="roster-verified-btn">✓ Slot verified</button>
+      </div>
+    </div>
+  </section>
+  <section class="board" id="board"></section>
+</div>
+
+<div class="img-preview-overlay" id="img-preview-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="img-preview-box">
+    <div class="img-preview-header">
+      <span class="preview-dot" id="img-preview-dot"></span>
+      <span id="img-preview-title">Squad · Team</span>
+      <span class="preview-spacer"></span>
+      <button type="button" class="img-preview-close" id="img-preview-close" aria-label="Close">×</button>
+    </div>
+    <img class="img-preview-img" id="img-preview-img" alt="">
+  </div>
+</div>
+
+<div class="task-sheet-backdrop" id="task-sheet-backdrop"></div>
+<div class="task-sheet" id="task-sheet" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <div class="sheet-badge" id="sheet-badge"></div>
+    <div class="sheet-title-block">
+      <div class="sheet-title" id="sheet-title"></div>
+      <div class="sheet-subtitle" id="sheet-subtitle"></div>
+    </div>
+    <button class="sheet-close" id="sheet-close" aria-label="Close">×</button>
+  </div>
+  <div class="sheet-body" id="sheet-body"></div>
 </div>
 
 <script>
@@ -1975,6 +2522,37 @@ function resolveSquadImage(squad, teamIndex) {
       || squad.teams[teamIndex].image;
 }
 
+const SERVER_SQUAD_POSITIONS = {}; // { phase1: { A1: {x, y}, ... }, phase2: {...}, core: {...} }
+const POSITIONS_STORAGE_KEY = 'bsby-squad-positions';
+
+function getLocalPositions() {
+  try { return JSON.parse(localStorage.getItem(POSITIONS_STORAGE_KEY) || '{}'); }
+  catch (e) { return {}; }
+}
+function setLocalPositions(obj) {
+  try { localStorage.setItem(POSITIONS_STORAGE_KEY, JSON.stringify(obj)); }
+  catch (e) {}
+}
+function effectivePhaseKeyForPositions(phaseKey) {
+  return phaseKey === 'phase3' ? 'phase2' : phaseKey;
+}
+function getRolePosition(phaseKey, roleId) {
+  const eff = effectivePhaseKeyForPositions(phaseKey);
+  const local = getLocalPositions();
+  if (local[eff] && local[eff][roleId]) return local[eff][roleId];
+  if (SERVER_SQUAD_POSITIONS[eff] && SERVER_SQUAD_POSITIONS[eff][roleId]) {
+    return SERVER_SQUAD_POSITIONS[eff][roleId];
+  }
+  return null;
+}
+function setRolePosition(phaseKey, roleId, x, y) {
+  const eff = effectivePhaseKeyForPositions(phaseKey);
+  const local = getLocalPositions();
+  if (!local[eff]) local[eff] = {};
+  local[eff][roleId] = { x: Math.round(x * 1000) / 1000, y: Math.round(y * 1000) / 1000 };
+  setLocalPositions(local);
+}
+
 async function loadServerSquadImages() {
   try {
     const res = await fetch(`${SQUADS_JSON_URL}?t=${Date.now()}`, { cache: 'no-store' });
@@ -1982,6 +2560,9 @@ async function loadServerSquadImages() {
     const data = await res.json();
     if (!data || typeof data !== 'object') return;
     Object.assign(SERVER_SQUAD_IMAGES, data.images || data);
+    if (data.positions && typeof data.positions === 'object') {
+      Object.assign(SERVER_SQUAD_POSITIONS, data.positions);
+    }
     // Refresh any images currently in the DOM that don't have a local override
     SQUADS.forEach(sq => {
       sq.teams.forEach((_, idx) => {
@@ -2005,10 +2586,19 @@ function exportSquadImagesJson() {
       if (value) images[pairKey(sq.id, idx)] = value;
     });
   });
+  // Merge server positions + local edits
+  const positions = {};
+  ['phase1', 'phase2', 'core'].forEach(p => {
+    const merged = { ...(SERVER_SQUAD_POSITIONS[p] || {}) };
+    const local = getLocalPositions()[p] || {};
+    Object.assign(merged, local);
+    if (Object.keys(merged).length) positions[p] = merged;
+  });
   const payload = {
     generated: new Date().toISOString(),
     alliance: 'BSBY',
     images,
+    positions,
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -2160,74 +2750,182 @@ function wireSquadImageEditors() {
   });
 }
 
-// ── BUILD SIDEBAR ──
-const sidebar = document.getElementById('sidebar');
-sidebar.innerHTML = `
-  <section class="sidebar-intro">
-    <div class="sidebar-kicker">BSBY · Server 606</div>
-    <div class="sidebar-title">Role Selector</div>
-    <div class="sidebar-meta">Pick your numbered slot to open a cleaner mission board with tabs, maps, squad identity, and chronological tasks for each phase.</div>
-  </section>
-  <section class="selector-grid"></section>
-`;
-const selectorGrid = sidebar.querySelector('.selector-grid');
-SQUADS.forEach(sq => {
-  const group = document.createElement('div');
-  group.className = `squad-group ${sq.color}`;
-  group.innerHTML = `
-    <div class="squad-header ${sq.color}">
-      <span class="dot"></span>
-      <div class="squad-header-copy">
-        <span class="squad-name">${sq.name}</span>
-        <span class="squad-mini">${sq.power}</span>
+// ── NEW UI: BUILD SQUADS STRIP + MAP BOARD ──
+const PHASE_KEYS = ['phase1', 'phase2', 'core', 'phase3'];
+const LAST_ROLE_STORAGE_KEY = 'bsby-last-role';
+
+function allRoleIds() {
+  const ids = [];
+  SQUADS.forEach(sq => sq.members.forEach(m => ids.push(m)));
+  return ids;
+}
+
+function renderSquadChipCompact(sq) {
+  return `
+    <div class="squad-chip ${sq.color}">
+      <div class="chip-head">
+        <span class="chip-dot"></span>
+        <span>${sq.name} · ${sq.subtitle}</span>
+      </div>
+      <div class="chip-teams">
+        ${sq.teams.map((t, i) => `
+          <div class="team-cell">
+            <span class="team-tag">T${i+1}</span>
+            <img src="${resolveSquadImage(sq, i)}" alt="${sq.name} ${t.label}" data-squad-img="${sq.id}:${i}">
+            <div class="team-panel-edit" data-edit-zone="${sq.id}:${i}" title="Click or drop a new screenshot" role="button" tabindex="0">
+              <span class="edit-icon">⬆</span>
+              <span>Drop or click</span>
+              <span class="edit-actions">
+                <button type="button" data-edit-reset="${sq.id}:${i}">Reset</button>
+              </span>
+              <input type="file" accept="image/*" data-edit-input="${sq.id}:${i}">
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="chip-slots-label">Slots · Position reference</div>
+      <div class="chip-slots" aria-label="${sq.name} slot positions">
+        ${sq.members.map(m => `
+          <div class="slot-tag">${m}</div>
+        `).join('')}
       </div>
     </div>
-    <div class="squad-subtitle">${sq.subtitle}</div>
-    ${renderTeamGallery(sq)}
-    <div class="squad-power">Power ${sq.power}</div>
-    <div class="squad-members"></div>
   `;
-  const members = group.querySelector('.squad-members');
-  sq.members.forEach(m => {
-    const btn = document.createElement('button');
-    btn.className = 'member-btn';
-    btn.dataset.id = m;
-    btn.innerHTML = `<span class="tag">${m}</span>`;
-    btn.onclick = () => selectMember(m);
-    members.appendChild(btn);
+}
+
+function renderSquadsStrip() {
+  const strip = document.getElementById('squads-strip');
+  strip.innerHTML = SQUADS.map(renderSquadChipCompact).join('');
+}
+
+function renderBoard() {
+  const board = document.getElementById('board');
+  board.innerHTML = `
+    <div class="board-tabs" role="tablist">
+      ${PHASE_KEYS.map((k, i) => `
+        <button class="board-tab ${i === 0 ? 'active' : ''}" data-phase="${k}" role="tab" type="button">
+          ${PHASE_MAPS[k].tab}
+        </button>
+      `).join('')}
+    </div>
+    ${PHASE_KEYS.map((k, i) => `
+      <div class="board-stage ${i === 0 ? 'active' : ''}" data-phase="${k}">
+        <div class="board-map-wrap">
+          <img class="board-map" src="${PHASE_MAPS[k].src}" alt="${PHASE_MAPS[k].alt}">
+          <div class="hotspot-layer" data-phase="${k}"></div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+  board.querySelectorAll('.board-tab').forEach(btn => {
+    btn.addEventListener('click', () => activatePhase(btn.dataset.phase));
   });
-  selectorGrid.appendChild(group);
-});
+  PHASE_KEYS.forEach(renderHotspotsForPhase);
+}
 
-wireSquadImageEditors();
-
-const editToggle = document.getElementById('edit-squads-toggle');
-const exportBtn = document.getElementById('export-squads-btn');
-const clearBtn = document.getElementById('clear-squads-btn');
-const IS_ADMIN = new URLSearchParams(location.search).has('admin');
-if (IS_ADMIN && editToggle) editToggle.hidden = false;
-if (editToggle) {
-  editToggle.addEventListener('click', () => {
-    const on = document.body.classList.toggle('edit-mode');
-    editToggle.classList.toggle('active', on);
-    editToggle.textContent = on ? '✓ Done editing' : '✎ Edit Squads';
-    if (exportBtn) exportBtn.hidden = !on;
-    if (clearBtn) clearBtn.hidden = !on;
+function activatePhase(phaseKey) {
+  document.querySelectorAll('.board-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.phase === phaseKey);
+  });
+  document.querySelectorAll('.board-stage').forEach(s => {
+    s.classList.toggle('active', s.dataset.phase === phaseKey);
   });
 }
-if (exportBtn) exportBtn.addEventListener('click', exportSquadImagesJson);
-if (clearBtn) clearBtn.addEventListener('click', clearLocalSquadEdits);
 
-loadServerSquadImages();
+function renderHotspotsForPhase(phaseKey) {
+  const layer = document.querySelector(`.hotspot-layer[data-phase="${phaseKey}"]`);
+  if (!layer) return;
+  const roleIds = allRoleIds();
+  layer.innerHTML = roleIds.map(id => {
+    const info = getSquadInfo(id);
+    const stored = getRolePosition(phaseKey, id);
+    // Default scattered grid when no position set yet (per-phase offset to make them visible)
+    const fallback = scatterFallback(id, phaseKey);
+    const pos = stored || fallback;
+    return `
+      <button class="hotspot ${info.color}" data-role="${id}" data-phase="${phaseKey}"
+              style="left:${pos.x * 100}%; top:${pos.y * 100}%;"
+              aria-label="${id}" type="button">${id}</button>
+    `;
+  }).join('');
+  layer.querySelectorAll('.hotspot').forEach(btn => {
+    btn.addEventListener('click', e => {
+      if (document.body.classList.contains('edit-positions')) return;
+      openTaskSheet(btn.dataset.role, btn.dataset.phase);
+    });
+    enableHotspotDrag(btn);
+  });
+}
 
-// ── SELECT MEMBER ──
-function selectMember(id) {
-  document.querySelectorAll('.member-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll(`.member-btn[data-id="${id}"]`).forEach(b => b.classList.add('active'));
+function scatterFallback(roleId, phaseKey) {
+  // Provide initial spread so 20 hotspots don't overlap. Admin moves them after.
+  const all = allRoleIds();
+  const idx = all.indexOf(roleId);
+  const cols = 5;
+  const col = idx % cols;
+  const row = Math.floor(idx / cols);
+  return { x: 0.1 + col * 0.2, y: 0.1 + row * 0.2 };
+}
 
-  const info = getSquadInfo(id);
-  const events = getMemberData(id);
-  const main = document.getElementById('main');
+function enableHotspotDrag(btn) {
+  let dragging = false;
+  let lastPos = null;
+  const start = e => {
+    if (!document.body.classList.contains('edit-positions')) return;
+    e.preventDefault();
+    dragging = true;
+    btn.classList.add('dragging');
+  };
+  const move = e => {
+    if (!dragging) return;
+    e.preventDefault();
+    const layer = btn.parentElement;
+    const rect = layer.getBoundingClientRect();
+    const pt = e.touches ? e.touches[0] : e;
+    const x = (pt.clientX - rect.left) / rect.width;
+    const y = (pt.clientY - rect.top) / rect.height;
+    const cx = Math.max(0, Math.min(1, x));
+    const cy = Math.max(0, Math.min(1, y));
+    btn.style.left = `${cx * 100}%`;
+    btn.style.top = `${cy * 100}%`;
+    lastPos = { x: cx, y: cy };
+  };
+  const end = () => {
+    if (!dragging) return;
+    dragging = false;
+    btn.classList.remove('dragging');
+    if (lastPos) {
+      setRolePosition(btn.dataset.phase, btn.dataset.role, lastPos.x, lastPos.y);
+      // If editing phase2, sync to phase3 view (same map)
+      if (btn.dataset.phase === 'phase2') {
+        const sib = document.querySelector(`.hotspot-layer[data-phase="phase3"] .hotspot[data-role="${btn.dataset.role}"]`);
+        if (sib) {
+          sib.style.left = btn.style.left;
+          sib.style.top = btn.style.top;
+        }
+      }
+      lastPos = null;
+    }
+  };
+  btn.addEventListener('mousedown', start);
+  btn.addEventListener('touchstart', start, { passive: false });
+  window.addEventListener('mousemove', move);
+  window.addEventListener('touchmove', move, { passive: false });
+  window.addEventListener('mouseup', end);
+  window.addEventListener('touchend', end);
+}
+
+// ── BOTTOM SHEET ──
+function openTaskSheet(roleId, phaseKey) {
+  const info = getSquadInfo(roleId);
+  const events = getMemberData(roleId).filter(ev => getPhaseKey(ev.time) === phaseKey);
+  const phaseInfo = PHASE_MAPS[phaseKey];
+  const sheet = document.getElementById('task-sheet');
+  const backdrop = document.getElementById('task-sheet-backdrop');
+  const badge = document.getElementById('sheet-badge');
+  const title = document.getElementById('sheet-title');
+  const subtitle = document.getElementById('sheet-subtitle');
+  const body = document.getElementById('sheet-body');
 
   const badgeColors = {
     green: `background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)`,
@@ -2235,128 +2933,204 @@ function selectMember(id) {
     blue: `background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)`,
     yellow: `background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)`,
   };
+  badge.style.cssText = badgeColors[info.color];
+  badge.textContent = roleId;
+  title.textContent = `${roleId} · ${info.name}`;
+  subtitle.textContent = `${phaseInfo.title} · ${phaseInfo.window}`;
 
-  const phaseOrder = ['phase1', 'phase2', 'core', 'phase3'];
-  const groupedEvents = phaseOrder.map(key => ({
-    key,
-    ...PHASE_MAPS[key],
-    events: events.filter(ev => getPhaseKey(ev.time) === key),
-  }));
-
-  let html = `
-    <div class="member-header">
-      <div class="mission-copy">
-        <div class="badge" style="${badgeColors[info.color]}">${id}</div>
-        <div class="info">
-          <div class="mission-kicker">Alliance BSBY · Server 606 · Last Z: Survival Shooter</div>
-          <h2>${id} · ${info.name}</h2>
-          <p>${info.subtitle}. ${info.detail} Select your number on each phase map, then execute the tasks in order.</p>
-          <div class="mission-facts">
-            <div class="mission-fact">Squad Power ${info.power}</div>
-            <div class="mission-fact">${info.subtitle}</div>
-            <div class="mission-fact">Mode Canyon Clash</div>
-          </div>
+  if (events.length === 0) {
+    body.innerHTML = `<div class="sheet-empty">Aucune tâche définie pour <strong>${roleId}</strong> en ${phaseInfo.tab}.</div>`;
+  } else {
+    body.innerHTML = events.map(ev => `
+      <div class="tl-event ${ev.type}">
+        <div class="tl-card">
+          <div class="tl-time">${ev.time}</div>
+          <div class="tl-title">${ev.title}</div>
+          <ul class="tl-tasks">
+            ${ev.tasks.map(t => `<li>${t}</li>`).join('')}
+          </ul>
+          ${ev.note ? `<div class="tl-note">${ev.note}</div>` : ''}
         </div>
       </div>
-      <div class="mission-roster">
-        ${renderTeamGallery(info)}
-        <div class="mission-roster-copy">
-          <strong>${info.name} Team Layout</strong>
-          <span>Use the Team 1 and Team 2 roster photos for visual alignment, then switch through the phase tabs to match the correct tactical map and objective timing.</span>
-        </div>
-      </div>
-    </div>
-  `;
-  html += `
-    <section class="phase-shell">
-      <div class="phase-tabs">
-        ${groupedEvents.map((phase, index) => `
-          <button
-            class="phase-tab ${index === 0 ? 'active' : ''}"
-            type="button"
-            data-phase="${phase.key}"
-          >${phase.tab}</button>
-        `).join('')}
-      </div>
-  `;
+    `).join('');
+  }
 
-  groupedEvents.forEach((phase, phaseIndex) => {
-    html += `
-      <section
-        class="phase-stage ${phaseIndex === 0 ? 'active' : ''}"
-        data-phase="${phase.key}"
-        style="animation-delay:${phaseIndex*0.05}s"
-      >
-        <aside class="phase-sidebar-panel">
-          <div class="phase-sidebar-head">
-            <div class="phase-window">${phase.window}</div>
-            <h3>${phase.title}</h3>
-            <p>${phase.caption}</p>
-          </div>
-          <div class="phase-task-stack">
-    `;
-
-    phase.events.forEach((ev, i) => {
-      html += `
-            <div class="tl-event ${ev.type}" style="animation-delay:${i*0.05}s">
-              <div class="tl-card">
-                <div class="tl-time">${ev.time}</div>
-                <div class="tl-title">${ev.title}</div>
-                <ul class="tl-tasks">
-                  ${ev.tasks.map(t => `<li>${t}</li>`).join('')}
-                </ul>
-                ${ev.note ? `<div class="tl-note">${ev.note}</div>` : ''}
-              </div>
-            </div>
-      `;
-    });
-
-    html += `
-          </div>
-        </aside>
-        <div class="phase-map-stage">
-          <div class="phase-map-board">
-            <img class="phase-map" src="${phase.src}" alt="${phase.alt}">
-            <div class="phase-map-caption">
-              <strong>${id}</strong> follows the numbered slot shown on this map for <strong>${phase.title}</strong>.
-            </div>
-          </div>
-        </div>
-      </section>
-    `;
-  });
-
-  html += `</section>`;
-
-  // Shot calls
-  const relevantTimes = events.map(e => e.time);
-  html += `
-    <div class="shot-calls">
-      <h3>Shot Calls — Listen For</h3>
-      <div class="calls">
-        ${SHOT_CALLS.map(sc => {
-          const isActive = relevantTimes.some(t => sc.time.includes(t) || t.includes(sc.time));
-          return `<div class="call-chip ${isActive ? 'active-call' : ''}">${sc.time} → ${sc.text}</div>`;
-        }).join('')}
-      </div>
-    </div>
-  `;
-
-  html += `
-    <div class="gold-rules">
-      <div class="gold-rule">✦ Capture, Capture, Capture</div>
-      <div class="gold-rule">✦ Play Your Role</div>
-      <div class="gold-rule">✦ Communicate</div>
-    </div>
-  `;
-
-  main.innerHTML = html;
-  main.querySelectorAll('.phase-tab').forEach(btn => {
-    btn.addEventListener('click', () => selectPhaseTab(btn.dataset.phase));
-  });
-  wireSquadImageEditors();
-  main.scrollTop = 0;
+  sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden', 'false');
+  backdrop.classList.add('open');
+  try { localStorage.setItem(LAST_ROLE_STORAGE_KEY, roleId); } catch (e) {}
 }
+
+function closeTaskSheet() {
+  document.getElementById('task-sheet').classList.remove('open');
+  document.getElementById('task-sheet').setAttribute('aria-hidden', 'true');
+  document.getElementById('task-sheet-backdrop').classList.remove('open');
+}
+
+// ── ADMIN BUTTONS ──
+const editToggle = document.getElementById('edit-squads-toggle');
+const editPositionsToggle = document.getElementById('edit-positions-toggle');
+const exportBtn = document.getElementById('export-squads-btn');
+const clearBtn = document.getElementById('clear-squads-btn');
+const IS_ADMIN = new URLSearchParams(location.search).has('admin');
+if (IS_ADMIN) {
+  if (editToggle) editToggle.hidden = false;
+  if (editPositionsToggle) editPositionsToggle.hidden = false;
+  if (exportBtn) exportBtn.hidden = false;
+}
+if (editToggle) {
+  editToggle.addEventListener('click', () => {
+    const on = document.body.classList.toggle('edit-mode');
+    editToggle.classList.toggle('active', on);
+    editToggle.textContent = on ? '✓ Done editing' : '✎ Edit Squads';
+    if (clearBtn) clearBtn.hidden = !on;
+    if (on && document.body.classList.contains('edit-positions')) {
+      editPositionsToggle.click(); // mutually exclusive
+    }
+  });
+}
+if (editPositionsToggle) {
+  editPositionsToggle.addEventListener('click', () => {
+    const on = document.body.classList.toggle('edit-positions');
+    editPositionsToggle.classList.toggle('active', on);
+    editPositionsToggle.textContent = on ? '✓ Done positions' : '◎ Edit Positions';
+    if (on && document.body.classList.contains('edit-mode')) {
+      editToggle.click(); // mutually exclusive
+    }
+  });
+}
+if (exportBtn) exportBtn.addEventListener('click', exportSquadImagesJson);
+if (clearBtn) clearBtn.addEventListener('click', clearLocalSquadEdits);
+
+// ── ROSTER PANEL ──
+const ROSTER_STATE_KEY = 'bsby-roster-verified';
+function getRosterVerified() {
+  try { return localStorage.getItem(ROSTER_STATE_KEY) === '1'; }
+  catch (e) { return false; }
+}
+function setRosterVerified(v) {
+  try {
+    if (v) localStorage.setItem(ROSTER_STATE_KEY, '1');
+    else localStorage.removeItem(ROSTER_STATE_KEY);
+  } catch (e) {}
+}
+function setRosterOpen(open) {
+  const panel = document.getElementById('roster-panel');
+  const bar = document.getElementById('roster-bar');
+  const toggle = document.getElementById('roster-bar-toggle');
+  panel.classList.toggle('open', open);
+  bar.setAttribute('aria-expanded', open ? 'true' : 'false');
+  toggle.textContent = open ? 'Hide' : 'Show';
+}
+function applyVerifiedDisplay(verified) {
+  const panel = document.getElementById('roster-panel');
+  const kicker = document.getElementById('roster-bar-kicker');
+  const title = document.getElementById('roster-bar-title');
+  const hint = document.getElementById('roster-bar-hint');
+  const icon = document.getElementById('roster-bar-icon');
+  panel.classList.toggle('verified', verified);
+  if (verified) {
+    kicker.textContent = 'Roster · Verified';
+    title.textContent = 'Slot confirmed';
+    hint.textContent = 'Tap to re-check Team 1 / Team 2';
+    icon.textContent = '✓';
+  } else {
+    kicker.textContent = 'Step 1 · Roster Check';
+    title.textContent = 'Verify your slot';
+    hint.textContent = 'Confirm Team 1 / Team 2 for this week';
+    icon.textContent = '⬢';
+  }
+}
+function wireRosterPanel() {
+  const bar = document.getElementById('roster-bar');
+  const verifiedBtn = document.getElementById('roster-verified-btn');
+  const verified = getRosterVerified();
+  applyVerifiedDisplay(verified);
+  // First visit (not verified) → open by default; verified → collapsed
+  setRosterOpen(!verified);
+  bar.addEventListener('click', e => {
+    if (e.target.closest('button') && e.target.id !== 'roster-bar-toggle') return;
+    const panel = document.getElementById('roster-panel');
+    setRosterOpen(!panel.classList.contains('open'));
+  });
+  bar.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const panel = document.getElementById('roster-panel');
+      setRosterOpen(!panel.classList.contains('open'));
+    }
+  });
+  verifiedBtn.addEventListener('click', () => {
+    setRosterVerified(true);
+    applyVerifiedDisplay(true);
+    setRosterOpen(false);
+  });
+}
+
+// ── TEAM IMAGE PREVIEW ──
+function openImagePreview(squadId, teamIndex) {
+  const sq = SQUADS.find(s => s.id === squadId);
+  if (!sq) return;
+  const team = sq.teams[teamIndex];
+  const overlay = document.getElementById('img-preview-overlay');
+  const img = document.getElementById('img-preview-img');
+  const dot = document.getElementById('img-preview-dot');
+  const title = document.getElementById('img-preview-title');
+  img.src = resolveSquadImage(sq, teamIndex);
+  img.alt = `${sq.name} ${team.label}`;
+  const colorVar = `var(--${sq.color})`;
+  dot.style.background = colorVar;
+  dot.style.boxShadow = `0 0 8px ${colorVar}`;
+  title.textContent = `${sq.name} · ${team.label}`;
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+}
+function closeImagePreview() {
+  const overlay = document.getElementById('img-preview-overlay');
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+}
+function wireTeamCellPreview() {
+  document.querySelectorAll('.team-cell').forEach(cell => {
+    cell.addEventListener('click', e => {
+      // In admin edit-mode, the edit overlay handles clicks
+      if (document.body.classList.contains('edit-mode')) return;
+      const img = cell.querySelector('[data-squad-img]');
+      if (!img) return;
+      const [sid, idx] = img.dataset.squadImg.split(':');
+      openImagePreview(sid, parseInt(idx, 10));
+    });
+  });
+}
+
+// ── INIT ──
+async function initBoard() {
+  renderSquadsStrip();
+  renderBoard();
+  wireSquadImageEditors();
+  wireTeamCellPreview();
+  wireRosterPanel();
+
+  document.getElementById('sheet-close').addEventListener('click', closeTaskSheet);
+  document.getElementById('task-sheet-backdrop').addEventListener('click', closeTaskSheet);
+  document.getElementById('img-preview-close').addEventListener('click', closeImagePreview);
+  document.getElementById('img-preview-overlay').addEventListener('click', e => {
+    if (e.target.id === 'img-preview-overlay') closeImagePreview();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeTaskSheet();
+      closeImagePreview();
+    }
+  });
+
+  await loadServerSquadImages();
+  // Re-render hotspots with server positions now loaded
+  PHASE_KEYS.forEach(renderHotspotsForPhase);
+}
+
+initBoard();
+
 </script>
 </body>
 </html>
