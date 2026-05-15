@@ -628,6 +628,89 @@
     object-position: center;
     background: rgba(7,5,7,0.9);
   }
+  .team-panel { position: relative; }
+  .team-panel-edit {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(7,5,7,0.78);
+    border-radius: 14px;
+    color: #fff6ea;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 10px;
+    pointer-events: auto;
+    cursor: pointer;
+    border: 1px dashed rgba(255,179,71,0.5);
+  }
+  .team-panel-edit:hover,
+  .team-panel-edit.dragover {
+    background: rgba(255,179,71,0.18);
+    border-color: rgba(255,179,71,0.9);
+  }
+  .team-panel-edit .edit-icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+  .team-panel-edit .edit-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .team-panel-edit .edit-actions button {
+    background: rgba(255,255,255,0.08);
+    color: #fff6ea;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .team-panel-edit .edit-actions button:hover {
+    background: rgba(255,179,71,0.2);
+  }
+  body.edit-mode .team-panel-edit { display: flex; }
+  .team-panel-edit input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .edit-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+    padding: 6px 12px;
+    border: 1px solid rgba(255,179,71,0.4);
+    border-radius: 999px;
+    background: rgba(255,179,71,0.08);
+    color: #ffb347;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .edit-toggle:hover {
+    background: rgba(255,179,71,0.18);
+  }
+  .edit-toggle.active {
+    background: #ffb347;
+    color: #1a0f0a;
+    border-color: #ffb347;
+  }
   .squad-power {
     padding: 0 16px 14px;
     font-family: 'Share Tech Mono', monospace;
@@ -1417,9 +1500,9 @@
 
 <div class="header">
   <div class="header-copy">
-    <div class="header-kicker">Alliance SSQ · Server 606 · Last Z: Survival Shooter</div>
+    <div class="header-kicker">Alliance BSBY · Server 606 · Last Z: Survival Shooter</div>
     <h1>Canyon <span>Clash</span><br>War Board</h1>
-    <p>Interactive tactical command board for SSQ. Select a role, track your phase-by-phase orders, and align your map position with the real squad setup.</p>
+    <p>Interactive tactical command board for BSBY. Select a role, track your phase-by-phase orders, and align your map position with the real squad setup.</p>
     <div class="header-tags">
       <div class="header-tag">4 squads</div>
       <div class="header-tag">4 phases</div>
@@ -1428,8 +1511,11 @@
     </div>
     <div class="header-stats">
       <div class="header-stat">Mode: Canyon Clash</div>
-      <div class="header-stat">Alliance: SSQ</div>
+      <div class="header-stat">Alliance: BSBY</div>
       <div class="header-stat">Plan: War Plan 1.0</div>
+      <button type="button" class="edit-toggle" id="edit-squads-toggle" title="Activer l'édition des images de squad" hidden>✎ Edit Squads</button>
+      <button type="button" class="edit-toggle" id="export-squads-btn" title="Exporter squads.json pour le déployer aux membres" hidden>⬇ Export squads.json</button>
+      <button type="button" class="edit-toggle" id="clear-squads-btn" title="Effacer mes éditions locales" hidden>↺ Clear my edits</button>
     </div>
   </div>
   <div class="header-visual">
@@ -1869,9 +1955,85 @@ function getSquadInfo(id) {
   return SQUADS.find(sq => sq.id === id[0]);
 }
 
+const SQUAD_IMG_STORAGE_PREFIX = 'bsby-squad-img:';
+const SQUADS_JSON_URL = 'squads.json';
+const SERVER_SQUAD_IMAGES = {}; // populated async from squads.json
+function squadImgKey(squadId, teamIndex) {
+  return `${SQUAD_IMG_STORAGE_PREFIX}${squadId}:${teamIndex}`;
+}
+function pairKey(squadId, teamIndex) {
+  return `${squadId}:${teamIndex}`;
+}
+function getStoredSquadImage(squadId, teamIndex) {
+  try { return localStorage.getItem(squadImgKey(squadId, teamIndex)); }
+  catch (e) { return null; }
+}
+function resolveSquadImage(squad, teamIndex) {
+  return getStoredSquadImage(squad.id, teamIndex)
+      || SERVER_SQUAD_IMAGES[pairKey(squad.id, teamIndex)]
+      || squad.teams[teamIndex].image;
+}
+
+async function loadServerSquadImages() {
+  try {
+    const res = await fetch(`${SQUADS_JSON_URL}?t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data || typeof data !== 'object') return;
+    Object.assign(SERVER_SQUAD_IMAGES, data.images || data);
+    // Refresh any images currently in the DOM that don't have a local override
+    SQUADS.forEach(sq => {
+      sq.teams.forEach((_, idx) => {
+        if (getStoredSquadImage(sq.id, idx)) return;
+        const url = SERVER_SQUAD_IMAGES[pairKey(sq.id, idx)];
+        if (url) updateSquadImage(sq.id, idx, url);
+      });
+    });
+  } catch (e) {
+    // squads.json is optional — silent fail is fine
+  }
+}
+
+function exportSquadImagesJson() {
+  const images = {};
+  SQUADS.forEach(sq => {
+    sq.teams.forEach((_, idx) => {
+      const local = getStoredSquadImage(sq.id, idx);
+      const server = SERVER_SQUAD_IMAGES[pairKey(sq.id, idx)];
+      const value = local || server;
+      if (value) images[pairKey(sq.id, idx)] = value;
+    });
+  });
+  const payload = {
+    generated: new Date().toISOString(),
+    alliance: 'BSBY',
+    images,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'squads.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function clearLocalSquadEdits() {
+  if (!confirm('Effacer toutes tes modifications locales (non-exportées) ? Les images reviendront à la version déployée.')) return;
+  SQUADS.forEach(sq => {
+    sq.teams.forEach((_, idx) => {
+      localStorage.removeItem(squadImgKey(sq.id, idx));
+      const fallback = SERVER_SQUAD_IMAGES[pairKey(sq.id, idx)] || sq.teams[idx].image;
+      updateSquadImage(sq.id, idx, fallback);
+    });
+  });
+}
+
 function renderTeamGallery(squad) {
   return `
-    <div class="team-gallery" data-team-gallery>
+    <div class="team-gallery" data-team-gallery data-squad-id="${squad.id}">
       <div class="team-switcher" role="tablist" aria-label="${squad.name} team selector">
         ${squad.teams.map((team, index) => `
           <button
@@ -1886,7 +2048,15 @@ function renderTeamGallery(squad) {
       <div class="team-panels">
         ${squad.teams.map((team, index) => `
           <div class="team-panel ${index === 0 ? 'active' : ''}" data-team-panel="${index}">
-            <img src="${team.image}" alt="${squad.name} ${team.label} roster">
+            <img src="${resolveSquadImage(squad, index)}" alt="${squad.name} ${team.label} roster" data-squad-img="${squad.id}:${index}">
+            <div class="team-panel-edit" data-edit-zone="${squad.id}:${index}" title="Click or drop a new screenshot" role="button" tabindex="0">
+              <span class="edit-icon">⬆</span>
+              <span>Drop or click<br>to replace</span>
+              <span class="edit-actions">
+                <button type="button" data-edit-reset="${squad.id}:${index}">Reset</button>
+              </span>
+              <input type="file" accept="image/*" data-edit-input="${squad.id}:${index}">
+            </div>
           </div>
         `).join('')}
       </div>
@@ -1894,11 +2064,106 @@ function renderTeamGallery(squad) {
   `;
 }
 
+// ── SQUAD IMAGE EDITING ──
+async function compressImageFile(file, maxWidth = 1000, quality = 0.85) {
+  const dataUrl = await new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+  const img = await new Promise((resolve, reject) => {
+    const i = new Image();
+    i.onload = () => resolve(i);
+    i.onerror = reject;
+    i.src = dataUrl;
+  });
+  const scale = Math.min(1, maxWidth / img.width);
+  const w = Math.round(img.width * scale);
+  const h = Math.round(img.height * scale);
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0, w, h);
+  return canvas.toDataURL('image/jpeg', quality);
+}
+
+function updateSquadImage(squadId, teamIndex, dataUrl) {
+  document.querySelectorAll(`img[data-squad-img="${squadId}:${teamIndex}"]`)
+    .forEach(el => { el.src = dataUrl; });
+}
+
+async function handleSquadImageFile(squadId, teamIndex, file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  try {
+    const compressed = await compressImageFile(file);
+    localStorage.setItem(squadImgKey(squadId, teamIndex), compressed);
+    updateSquadImage(squadId, teamIndex, compressed);
+  } catch (err) {
+    alert('Impossible de charger cette image. Essaye une image plus petite ou un autre format.');
+    console.error(err);
+  }
+}
+
+function resetSquadImage(squadId, teamIndex) {
+  localStorage.removeItem(squadImgKey(squadId, teamIndex));
+  const squad = SQUADS.find(s => s.id === squadId);
+  if (squad) updateSquadImage(squadId, teamIndex, squad.teams[teamIndex].image);
+}
+
+function wireSquadImageEditors() {
+  document.querySelectorAll('[data-edit-input]').forEach(input => {
+    input.addEventListener('change', e => {
+      const [sid, idx] = input.dataset.editInput.split(':');
+      const file = e.target.files && e.target.files[0];
+      if (file) handleSquadImageFile(sid, parseInt(idx, 10), file);
+      input.value = '';
+    });
+  });
+  document.querySelectorAll('[data-edit-reset]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const [sid, idx] = btn.dataset.editReset.split(':');
+      if (confirm(`Restaurer l'image d'origine pour Squad ${sid} Team ${parseInt(idx, 10) + 1} ?`)) {
+        resetSquadImage(sid, parseInt(idx, 10));
+      }
+    });
+  });
+  document.querySelectorAll('[data-edit-zone]').forEach(zone => {
+    zone.addEventListener('click', e => {
+      if (e.target.closest('[data-edit-reset]')) return;
+      const input = zone.querySelector('input[type="file"]');
+      if (input) input.click();
+    });
+    zone.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const input = zone.querySelector('input[type="file"]');
+        if (input) input.click();
+      }
+    });
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      zone.classList.add('dragover');
+    });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      const [sid, idx] = zone.dataset.editZone.split(':');
+      const file = e.dataTransfer.files && e.dataTransfer.files[0];
+      if (file) handleSquadImageFile(sid, parseInt(idx, 10), file);
+    });
+  });
+}
+
 // ── BUILD SIDEBAR ──
 const sidebar = document.getElementById('sidebar');
 sidebar.innerHTML = `
   <section class="sidebar-intro">
-    <div class="sidebar-kicker">SSQ · Server 606</div>
+    <div class="sidebar-kicker">BSBY · Server 606</div>
     <div class="sidebar-title">Role Selector</div>
     <div class="sidebar-meta">Pick your numbered slot to open a cleaner mission board with tabs, maps, squad identity, and chronological tasks for each phase.</div>
   </section>
@@ -1933,6 +2198,27 @@ SQUADS.forEach(sq => {
   selectorGrid.appendChild(group);
 });
 
+wireSquadImageEditors();
+
+const editToggle = document.getElementById('edit-squads-toggle');
+const exportBtn = document.getElementById('export-squads-btn');
+const clearBtn = document.getElementById('clear-squads-btn');
+const IS_ADMIN = new URLSearchParams(location.search).has('admin');
+if (IS_ADMIN && editToggle) editToggle.hidden = false;
+if (editToggle) {
+  editToggle.addEventListener('click', () => {
+    const on = document.body.classList.toggle('edit-mode');
+    editToggle.classList.toggle('active', on);
+    editToggle.textContent = on ? '✓ Done editing' : '✎ Edit Squads';
+    if (exportBtn) exportBtn.hidden = !on;
+    if (clearBtn) clearBtn.hidden = !on;
+  });
+}
+if (exportBtn) exportBtn.addEventListener('click', exportSquadImagesJson);
+if (clearBtn) clearBtn.addEventListener('click', clearLocalSquadEdits);
+
+loadServerSquadImages();
+
 // ── SELECT MEMBER ──
 function selectMember(id) {
   document.querySelectorAll('.member-btn').forEach(b => b.classList.remove('active'));
@@ -1961,7 +2247,7 @@ function selectMember(id) {
       <div class="mission-copy">
         <div class="badge" style="${badgeColors[info.color]}">${id}</div>
         <div class="info">
-          <div class="mission-kicker">Alliance SSQ · Server 606 · Last Z: Survival Shooter</div>
+          <div class="mission-kicker">Alliance BSBY · Server 606 · Last Z: Survival Shooter</div>
           <h2>${id} · ${info.name}</h2>
           <p>${info.subtitle}. ${info.detail} Select your number on each phase map, then execute the tasks in order.</p>
           <div class="mission-facts">
@@ -2067,6 +2353,7 @@ function selectMember(id) {
   main.querySelectorAll('.phase-tab').forEach(btn => {
     btn.addEventListener('click', () => selectPhaseTab(btn.dataset.phase));
   });
+  wireSquadImageEditors();
   main.scrollTop = 0;
 }
 </script>
