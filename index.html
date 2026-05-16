@@ -301,10 +301,10 @@
   /* ── HEADER ── */
   .header {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(300px, 420px);
-    gap: 28px;
+    grid-template-columns: minmax(0, 1.4fr) minmax(240px, 320px);
+    gap: 20px;
     align-items: stretch;
-    padding: 32px 32px 18px;
+    padding: 18px 24px 12px;
     max-width: 1480px;
     margin: 0 auto;
     position: relative;
@@ -312,75 +312,75 @@
   .header::before {
     content: '';
     position: absolute;
-    inset: 0 32px auto;
+    inset: 0 24px auto;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255,179,71,0.55), transparent);
   }
   .header-copy,
   .header-visual {
     border: 1px solid var(--border);
-    border-radius: 24px;
+    border-radius: 18px;
     background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
     box-shadow: var(--shadow);
     overflow: hidden;
     position: relative;
   }
   .header-copy {
-    padding: 28px;
+    padding: 18px 20px;
     backdrop-filter: blur(10px);
   }
   .header-kicker {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 7px 12px;
+    gap: 8px;
+    padding: 5px 10px;
     border-radius: 999px;
     background: rgba(255,179,71,0.1);
     border: 1px solid rgba(255,179,71,0.18);
     font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 1.5px;
+    font-size: 10px;
+    letter-spacing: 1.4px;
     color: var(--accent);
     text-transform: uppercase;
   }
   .header h1 {
-    margin-top: 18px;
-    font-size: clamp(34px, 5vw, 62px);
+    margin-top: 10px;
+    font-size: clamp(24px, 3.4vw, 38px);
     font-weight: 700;
-    letter-spacing: 6px;
+    letter-spacing: 4px;
     text-transform: uppercase;
     color: #fff8ef;
-    line-height: 0.95;
+    line-height: 1;
   }
   .header h1 span {
     color: var(--accent);
     text-shadow: 0 0 18px rgba(255,179,71,0.25);
   }
   .header p {
-    margin-top: 16px;
+    margin-top: 10px;
     max-width: 760px;
     font-family: 'Rajdhani', sans-serif;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 500;
-    line-height: 1.5;
+    line-height: 1.45;
     color: var(--text-dim);
-    letter-spacing: 0.4px;
+    letter-spacing: 0.3px;
   }
   .header-tags,
   .header-stats {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 18px;
+    gap: 8px;
+    margin-top: 12px;
   }
   .header-tag,
   .header-stat {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 1px;
+    font-size: 10px;
+    letter-spacing: 0.8px;
     border: 1px solid var(--border);
     border-radius: 999px;
-    padding: 8px 12px;
+    padding: 5px 10px;
     color: var(--text);
     background: rgba(255,255,255,0.025);
   }
@@ -388,7 +388,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    min-height: 280px;
+    min-height: 160px;
     background:
       linear-gradient(180deg, rgba(6,5,8,0.2), rgba(6,5,8,0.82)),
       url('Canyon_clash.jpg') center/cover no-repeat;
@@ -403,12 +403,12 @@
   .header-visual-copy {
     position: relative;
     z-index: 1;
-    padding: 22px;
+    padding: 14px 16px;
   }
   .header-visual-copy strong {
     display: block;
-    font-size: 24px;
-    letter-spacing: 2px;
+    font-size: 18px;
+    letter-spacing: 1.6px;
     text-transform: uppercase;
     color: #fff6ea;
   }
@@ -1521,17 +1521,31 @@
     font-weight: 700;
     letter-spacing: 0.5px;
     padding: 6px 4px;
-    min-height: 32px;
+    min-height: 36px;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     user-select: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
   }
   .squad-chip.green  .slot-tag { border-color: var(--green-border);  color: var(--green); }
   .squad-chip.red    .slot-tag { border-color: var(--red-border);    color: var(--red); }
   .squad-chip.blue   .slot-tag { border-color: var(--blue-border);   color: var(--blue); }
   .squad-chip.yellow .slot-tag { border-color: var(--yellow-border); color: var(--yellow); }
+  .squad-chip.green  .slot-tag:hover { background: var(--green-bg); }
+  .squad-chip.red    .slot-tag:hover { background: var(--red-bg); }
+  .squad-chip.blue   .slot-tag:hover { background: var(--blue-bg); }
+  .squad-chip.yellow .slot-tag:hover { background: var(--yellow-bg); }
+  .squad-chip .slot-tag.selected {
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.55);
+  }
+  .squad-chip.green  .slot-tag.selected { background: var(--green);  box-shadow: 0 0 12px var(--green); }
+  .squad-chip.red    .slot-tag.selected { background: var(--red);    box-shadow: 0 0 12px var(--red); }
+  .squad-chip.blue   .slot-tag.selected { background: var(--blue);   box-shadow: 0 0 12px var(--blue); }
+  .squad-chip.yellow .slot-tag.selected { background: var(--yellow); box-shadow: 0 0 12px var(--yellow); }
 
   /* Board */
   .board {
@@ -1557,16 +1571,32 @@
     border: 1px solid var(--border);
     background: var(--surface2);
     color: var(--text-dim);
-    padding: 10px 18px;
+    padding: 8px 16px;
     min-height: 44px;
-    border-radius: 999px;
+    border-radius: 16px;
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px;
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.15s ease;
     white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    line-height: 1.1;
   }
+  .board-tab .tab-label {
+    font-weight: 700;
+    letter-spacing: 1.4px;
+  }
+  .board-tab .tab-window {
+    font-size: 9px;
+    letter-spacing: 0.6px;
+    opacity: 0.7;
+  }
+  .board-tab.active .tab-window { opacity: 1; }
   .board-tab:hover {
     color: var(--text);
     border-color: rgba(0,229,255,0.22);
@@ -1582,6 +1612,44 @@
     padding: 14px;
   }
   .board-stage.active { display: block; }
+  .board-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 16px;
+    margin: 0 14px;
+    border-top: 1px dashed rgba(0,229,255,0.18);
+    border-bottom: 1px dashed rgba(0,229,255,0.18);
+    background: rgba(0,229,255,0.04);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-align: center;
+    transition: opacity 0.25s ease, max-height 0.25s ease, padding 0.25s ease, margin 0.25s ease;
+    overflow: hidden;
+    max-height: 60px;
+  }
+  .board-hint .hint-arrow {
+    display: inline-block;
+    animation: hintBounce 1.6s ease-in-out infinite;
+  }
+  @keyframes hintBounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+  }
+  body.has-selected-role .board-hint {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    pointer-events: none;
+    border-color: transparent;
+  }
   .board-map-wrap {
     position: relative;
     width: 100%;
@@ -1616,6 +1684,64 @@
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px;
     font-weight: 700;
+    transition: transform 0.15s ease;
+  }
+  /* Selected hotspot — solid disc with double sonar ping */
+  body:not(.edit-positions) .hotspot.selected {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    border: 2px solid rgba(255,255,255,0.85);
+    animation: hotspotBreathe 1.8s ease-in-out infinite;
+    z-index: 5;
+  }
+  body:not(.edit-positions) .hotspot.selected {
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  }
+  body:not(.edit-positions) .hotspot.green.selected  { background: var(--green);  box-shadow: 0 0 18px 2px var(--green); }
+  body:not(.edit-positions) .hotspot.red.selected    { background: var(--red);    box-shadow: 0 0 18px 2px var(--red); }
+  body:not(.edit-positions) .hotspot.blue.selected   { background: var(--blue);   box-shadow: 0 0 18px 2px var(--blue); }
+  body:not(.edit-positions) .hotspot.yellow.selected { background: var(--yellow); box-shadow: 0 0 18px 2px var(--yellow); }
+
+  /* Two ping rings, offset in time, scale outward and fade */
+  body:not(.edit-positions) .hotspot.selected::before,
+  body:not(.edit-positions) .hotspot.selected::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    border: 2px solid;
+    pointer-events: none;
+  }
+  body:not(.edit-positions) .hotspot.green.selected::before,
+  body:not(.edit-positions) .hotspot.green.selected::after  { border-color: var(--green); }
+  body:not(.edit-positions) .hotspot.red.selected::before,
+  body:not(.edit-positions) .hotspot.red.selected::after    { border-color: var(--red); }
+  body:not(.edit-positions) .hotspot.blue.selected::before,
+  body:not(.edit-positions) .hotspot.blue.selected::after   { border-color: var(--blue); }
+  body:not(.edit-positions) .hotspot.yellow.selected::before,
+  body:not(.edit-positions) .hotspot.yellow.selected::after { border-color: var(--yellow); }
+  body:not(.edit-positions) .hotspot.selected::before {
+    animation: sonarPing 2s ease-out infinite;
+  }
+  body:not(.edit-positions) .hotspot.selected::after {
+    animation: sonarPing 2s ease-out 1s infinite;
+  }
+
+  @keyframes hotspotBreathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50%      { transform: translate(-50%, -50%) scale(1.05); }
+  }
+  @keyframes sonarPing {
+    0%   { transform: scale(1);   opacity: 0.9; }
+    80%  { opacity: 0; }
+    100% { transform: scale(2.8); opacity: 0; }
   }
   /* In admin "edit positions" mode, hotspots are visible & draggable */
   body.edit-positions .hotspot {
@@ -2754,6 +2880,39 @@ function wireSquadImageEditors() {
 const PHASE_KEYS = ['phase1', 'phase2', 'core', 'phase3'];
 const LAST_ROLE_STORAGE_KEY = 'bsby-last-role';
 
+let SELECTED_ROLE = null;
+function getStoredSelectedRole() {
+  try { return localStorage.getItem(LAST_ROLE_STORAGE_KEY); }
+  catch (e) { return null; }
+}
+function applySelectedHighlight() {
+  document.querySelectorAll('.hotspot').forEach(h => {
+    h.classList.toggle('selected', !!SELECTED_ROLE && h.dataset.role === SELECTED_ROLE);
+  });
+  document.querySelectorAll('.slot-tag[data-mark-role]').forEach(t => {
+    t.classList.toggle('selected', !!SELECTED_ROLE && t.dataset.markRole === SELECTED_ROLE);
+  });
+  document.body.classList.toggle('has-selected-role', !!SELECTED_ROLE);
+}
+
+function wireSlotMarkers() {
+  document.querySelectorAll('.slot-tag[data-mark-role]').forEach(tag => {
+    tag.addEventListener('click', () => {
+      const roleId = tag.dataset.markRole;
+      // Toggle: same role tapped twice = deselect
+      selectRole(SELECTED_ROLE === roleId ? null : roleId);
+    });
+  });
+}
+function selectRole(roleId) {
+  SELECTED_ROLE = roleId;
+  try {
+    if (roleId) localStorage.setItem(LAST_ROLE_STORAGE_KEY, roleId);
+    else localStorage.removeItem(LAST_ROLE_STORAGE_KEY);
+  } catch (e) {}
+  applySelectedHighlight();
+}
+
 function allRoleIds() {
   const ids = [];
   SQUADS.forEach(sq => sq.members.forEach(m => ids.push(m)));
@@ -2783,10 +2942,10 @@ function renderSquadChipCompact(sq) {
           </div>
         `).join('')}
       </div>
-      <div class="chip-slots-label">Slots · Position reference</div>
+      <div class="chip-slots-label">Tap your slot to mark it on the map</div>
       <div class="chip-slots" aria-label="${sq.name} slot positions">
         ${sq.members.map(m => `
-          <div class="slot-tag">${m}</div>
+          <button type="button" class="slot-tag" data-mark-role="${m}" aria-label="Mark ${m} on the map">${m}</button>
         `).join('')}
       </div>
     </div>
@@ -2804,9 +2963,14 @@ function renderBoard() {
     <div class="board-tabs" role="tablist">
       ${PHASE_KEYS.map((k, i) => `
         <button class="board-tab ${i === 0 ? 'active' : ''}" data-phase="${k}" role="tab" type="button">
-          ${PHASE_MAPS[k].tab}
+          <span class="tab-label">${PHASE_MAPS[k].tab}</span>
+          <span class="tab-window">${PHASE_MAPS[k].window}</span>
         </button>
       `).join('')}
+    </div>
+    <div class="board-hint" id="board-hint" role="note">
+      <span class="hint-arrow" aria-hidden="true">↑</span>
+      <span>Select your slot above to highlight your position on the map</span>
     </div>
     ${PHASE_KEYS.map((k, i) => `
       <div class="board-stage ${i === 0 ? 'active' : ''}" data-phase="${k}">
@@ -2855,6 +3019,7 @@ function renderHotspotsForPhase(phaseKey) {
     });
     enableHotspotDrag(btn);
   });
+  applySelectedHighlight();
 }
 
 function scatterFallback(roleId, phaseKey) {
@@ -2958,7 +3123,7 @@ function openTaskSheet(roleId, phaseKey) {
   sheet.classList.add('open');
   sheet.setAttribute('aria-hidden', 'false');
   backdrop.classList.add('open');
-  try { localStorage.setItem(LAST_ROLE_STORAGE_KEY, roleId); } catch (e) {}
+  selectRole(roleId);
 }
 
 function closeTaskSheet() {
@@ -3105,11 +3270,14 @@ function wireTeamCellPreview() {
 
 // ── INIT ──
 async function initBoard() {
+  SELECTED_ROLE = getStoredSelectedRole();
   renderSquadsStrip();
   renderBoard();
   wireSquadImageEditors();
   wireTeamCellPreview();
+  wireSlotMarkers();
   wireRosterPanel();
+  applySelectedHighlight();
 
   document.getElementById('sheet-close').addEventListener('click', closeTaskSheet);
   document.getElementById('task-sheet-backdrop').addEventListener('click', closeTaskSheet);
