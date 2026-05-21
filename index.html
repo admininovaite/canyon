@@ -1427,16 +1427,72 @@
   .squads-strip {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 12px;
+  }
+  .roster-team-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .roster-team-copy {
+    min-width: 0;
+  }
+  .roster-team-kicker {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .roster-team-title {
+    margin-top: 2px;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .team-filter {
+    display: inline-grid;
+    grid-template-columns: repeat(2, minmax(92px, 1fr));
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid rgba(0,229,255,0.22);
+    border-radius: 8px;
+    background: rgba(7,5,7,0.58);
+  }
+  .team-filter-btn {
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .team-filter-btn.active {
+    background: rgba(0,229,255,0.14);
+    color: var(--accent-cool);
+    box-shadow: inset 0 0 0 1px rgba(0,229,255,0.24);
   }
   .squad-chip {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px;
+    border-radius: 8px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .squad-chip.has-selected-slot {
+    border-color: rgba(255,255,255,0.22);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 14px 38px rgba(0,0,0,0.28);
   }
   .squad-chip .chip-head {
     display: flex;
@@ -1463,19 +1519,17 @@
   .squad-chip.blue .chip-head span:last-child { color: var(--blue); }
   .squad-chip.yellow .chip-head span:last-child { color: var(--yellow); }
   .squad-chip .chip-teams {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    display: block;
   }
   .squad-chip .team-cell {
     position: relative;
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
-    aspect-ratio: 4/5;
+    aspect-ratio: 16/7;
     background: rgba(7,5,7,0.9);
     border: 1px solid rgba(255,255,255,0.08);
     cursor: zoom-in;
-    transition: border-color 0.15s ease, transform 0.15s ease;
+    transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   }
   .squad-chip .team-cell:hover {
     border-color: rgba(0,229,255,0.32);
@@ -1498,6 +1552,81 @@
     border-radius: 4px;
     pointer-events: none;
     z-index: 2;
+  }
+  .team-roster-hint {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    z-index: 2;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.78);
+    background: rgba(0,0,0,0.56);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 3px 6px;
+    pointer-events: none;
+  }
+  .roster-slot-markers {
+    position: absolute;
+    inset: auto 8px 22px;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 5px;
+    pointer-events: none;
+  }
+  .roster-slot-marker {
+    min-width: 0;
+    height: 20px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(7,5,7,0.66);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+  .roster-slot-marker:hover {
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.18);
+  }
+  .squad-chip.green  .roster-slot-marker { color: var(--green); border-color: var(--green-border); }
+  .squad-chip.red    .roster-slot-marker { color: var(--red); border-color: var(--red-border); }
+  .squad-chip.blue   .roster-slot-marker { color: var(--blue); border-color: var(--blue-border); }
+  .squad-chip.yellow .roster-slot-marker { color: var(--yellow); border-color: var(--yellow-border); }
+  .squad-chip.green  .roster-slot-marker.selected { background: var(--green); color: #071109; box-shadow: 0 0 14px var(--green); opacity: 1; }
+  .squad-chip.red    .roster-slot-marker.selected { background: var(--red); color: #fff; box-shadow: 0 0 14px var(--red); opacity: 1; }
+  .squad-chip.blue   .roster-slot-marker.selected { background: var(--blue); color: #fff; box-shadow: 0 0 14px var(--blue); opacity: 1; }
+  .squad-chip.yellow .roster-slot-marker.selected { background: var(--yellow); color: #1a1200; box-shadow: 0 0 14px var(--yellow); opacity: 1; }
+  .slot-confirmation {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 28px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 8px;
+    padding: 6px 8px;
+    background: rgba(255,255,255,0.035);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .slot-confirmation.active {
+    display: flex;
+  }
+  .slot-confirmation strong {
+    color: var(--text);
+    font-size: 11px;
   }
   .squad-chip .chip-slots-label {
     font-family: 'Share Tech Mono', monospace;
@@ -1990,15 +2119,23 @@
     box-shadow: 0 0 0 1px rgba(80,234,179,0.32);
   }
   .roster-panel.open .squads-strip { display: grid; }
-  .roster-panel:not(.open) .squads-strip { display: none; }
+  .roster-panel:not(.open) .squads-strip,
+  .roster-panel:not(.open) .roster-team-selector { display: none; }
 
   /* Responsive — new UI */
   @media (max-width: 900px) {
     .squads-strip { grid-template-columns: repeat(2, 1fr); }
+    .roster-team-selector {
+      align-items: stretch;
+      flex-direction: column;
+    }
+    .team-filter {
+      width: 100%;
+    }
   }
   @media (max-width: 600px) {
     .squads-strip { grid-template-columns: 1fr; }
-    .squad-chip .team-cell { aspect-ratio: 16/10; }
+    .squad-chip .team-cell { aspect-ratio: 16/8; }
   }
   @media (max-width: 520px) {
     .board-stage { padding: 8px; }
@@ -2006,6 +2143,8 @@
     .board-tab { padding: 9px 14px; font-size: 10px; }
     .squad-chip { padding: 8px; }
     .squad-chip .chip-head { font-size: 9px; }
+    .team-roster-hint { display: none; }
+    .roster-slot-marker { height: 22px; font-size: 9px; }
   }
 
   /* Image preview modal */
@@ -2167,6 +2306,7 @@
       <div class="header-stat">Plan: War Plan 1.0</div>
       <button type="button" class="edit-toggle" id="edit-squads-toggle" title="Toggle squad screenshot editing" hidden>✎ Edit Squads</button>
       <button type="button" class="edit-toggle" id="edit-positions-toggle" title="Toggle map hotspot positioning" hidden>◎ Edit Positions</button>
+      <button type="button" class="edit-toggle" id="save-squads-btn" title="Choose squads.json once, then auto-save admin edits" hidden>💾 Save squads.json</button>
       <button type="button" class="edit-toggle" id="export-squads-btn" title="Export squads.json to deploy to members" hidden>⬇ Export squads.json</button>
       <button type="button" class="edit-toggle" id="clear-squads-btn" title="Clear local screenshot edits" hidden>↺ Clear my edits</button>
     </div>
@@ -2200,6 +2340,7 @@
       <button type="button" class="roster-bar-toggle" id="roster-bar-toggle" aria-label="Toggle roster">Show</button>
     </div>
     <div class="roster-body">
+      <div class="roster-team-selector" id="roster-team-selector"></div>
       <div class="squads-strip" id="squads-strip"></div>
       <div class="roster-actions">
         <button type="button" class="roster-verified-btn" id="roster-verified-btn">✓ Slot verified</button>
@@ -2677,6 +2818,7 @@ function setRolePosition(phaseKey, roleId, x, y) {
   if (!local[eff]) local[eff] = {};
   local[eff][roleId] = { x: Math.round(x * 1000) / 1000, y: Math.round(y * 1000) / 1000 };
   setLocalPositions(local);
+  queueSquadsAutosave();
 }
 
 async function loadServerSquadImages() {
@@ -2702,7 +2844,7 @@ async function loadServerSquadImages() {
   }
 }
 
-function exportSquadImagesJson() {
+function buildSquadsPayload() {
   const images = {};
   SQUADS.forEach(sq => {
     sq.teams.forEach((_, idx) => {
@@ -2720,12 +2862,15 @@ function exportSquadImagesJson() {
     Object.assign(merged, local);
     if (Object.keys(merged).length) positions[p] = merged;
   });
-  const payload = {
+  return {
     generated: new Date().toISOString(),
     alliance: 'BSBY',
     images,
     positions,
   };
+}
+
+function downloadSquadsPayload(payload) {
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -2737,6 +2882,103 @@ function exportSquadImagesJson() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function exportSquadImagesJson() {
+  downloadSquadsPayload(buildSquadsPayload());
+}
+
+let squadsFileHandle = null;
+let squadsAutosaveTimer = null;
+let squadsServerSaveEnabled = false;
+
+function supportsDirectSquadsSave() {
+  return typeof window.showSaveFilePicker === 'function';
+}
+
+function setSquadsSaveButtonState(state, label) {
+  const btn = document.getElementById('save-squads-btn');
+  if (!btn) return;
+  btn.dataset.saveState = state;
+  btn.textContent = label;
+}
+
+async function saveSquadsJsonDirect({ silent = false } = {}) {
+  const savedToServer = await saveSquadsJsonToLocalServer({ silent });
+  if (savedToServer) return true;
+  if (squadsServerSaveEnabled || silent) return false;
+
+  if (!squadsFileHandle) {
+    if (silent) return false;
+    if (!supportsDirectSquadsSave()) {
+      alert('Sauvegarde directe indisponible ici. Lance admin-server.js en local ou utilise Export squads.json.');
+      exportSquadImagesJson();
+      return false;
+    }
+    try {
+      squadsFileHandle = await window.showSaveFilePicker({
+        suggestedName: 'squads.json',
+        types: [{
+          description: 'Canyon Clash squads data',
+          accept: { 'application/json': ['.json'] },
+        }],
+      });
+    } catch (err) {
+      setSquadsSaveButtonState('ready', 'Save squads.json');
+      return false;
+    }
+  }
+
+  try {
+    setSquadsSaveButtonState('saving', 'Saving...');
+    const writable = await squadsFileHandle.createWritable();
+    await writable.write(JSON.stringify(buildSquadsPayload(), null, 2));
+    await writable.close();
+    setSquadsSaveButtonState('saved', 'Saved squads.json');
+    window.setTimeout(() => {
+      if (squadsFileHandle) setSquadsSaveButtonState('ready', 'Auto-save linked');
+    }, 1400);
+    return true;
+  } catch (err) {
+    if (!silent) {
+      alert('Sauvegarde directe impossible. Le bouton Export squads.json reste disponible.');
+      console.error(err);
+    }
+    setSquadsSaveButtonState('error', 'Save failed');
+    return false;
+  }
+}
+
+async function saveSquadsJsonToLocalServer({ silent = false } = {}) {
+  try {
+    setSquadsSaveButtonState('saving', 'Saving...');
+    const res = await fetch('/__save-squads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(buildSquadsPayload(), null, 2),
+    });
+    if (!res.ok) throw new Error(`Save endpoint returned ${res.status}`);
+    squadsServerSaveEnabled = true;
+    setSquadsSaveButtonState('saved', 'Saved squads.json');
+    window.setTimeout(() => {
+      if (squadsServerSaveEnabled) setSquadsSaveButtonState('ready', 'Auto-save linked');
+    }, 1400);
+    return true;
+  } catch (err) {
+    if (!silent) {
+      console.warn('Local save endpoint unavailable', err);
+    }
+    setSquadsSaveButtonState('ready', 'Save squads.json');
+    return false;
+  }
+}
+
+function queueSquadsAutosave() {
+  if (!IS_ADMIN || (!squadsFileHandle && !squadsServerSaveEnabled)) return;
+  window.clearTimeout(squadsAutosaveTimer);
+  squadsAutosaveTimer = window.setTimeout(() => {
+    saveSquadsJsonDirect({ silent: true });
+  }, 350);
+}
+
 function clearLocalSquadEdits() {
   if (!confirm('Effacer toutes tes modifications locales (non-exportées) ? Les images reviendront à la version déployée.')) return;
   SQUADS.forEach(sq => {
@@ -2746,6 +2988,7 @@ function clearLocalSquadEdits() {
       updateSquadImage(sq.id, idx, fallback);
     });
   });
+  queueSquadsAutosave();
 }
 
 function renderTeamGallery(squad) {
@@ -2817,6 +3060,7 @@ async function handleSquadImageFile(squadId, teamIndex, file) {
     const compressed = await compressImageFile(file);
     localStorage.setItem(squadImgKey(squadId, teamIndex), compressed);
     updateSquadImage(squadId, teamIndex, compressed);
+    queueSquadsAutosave();
   } catch (err) {
     alert('Impossible de charger cette image. Essaye une image plus petite ou un autre format.');
     console.error(err);
@@ -2827,6 +3071,7 @@ function resetSquadImage(squadId, teamIndex) {
   localStorage.removeItem(squadImgKey(squadId, teamIndex));
   const squad = SQUADS.find(s => s.id === squadId);
   if (squad) updateSquadImage(squadId, teamIndex, squad.teams[teamIndex].image);
+  queueSquadsAutosave();
 }
 
 function wireSquadImageEditors() {
@@ -2879,11 +3124,21 @@ function wireSquadImageEditors() {
 // ── NEW UI: BUILD SQUADS STRIP + MAP BOARD ──
 const PHASE_KEYS = ['phase1', 'phase2', 'core', 'phase3'];
 const LAST_ROLE_STORAGE_KEY = 'bsby-last-role';
+const ACTIVE_TEAM_STORAGE_KEY = 'bsby-active-team';
 
 let SELECTED_ROLE = null;
+let ACTIVE_TEAM_INDEX = getStoredActiveTeam();
 function getStoredSelectedRole() {
   try { return localStorage.getItem(LAST_ROLE_STORAGE_KEY); }
   catch (e) { return null; }
+}
+function getStoredActiveTeam() {
+  try {
+    const value = parseInt(localStorage.getItem(ACTIVE_TEAM_STORAGE_KEY), 10);
+    return value === 1 ? 1 : 0;
+  } catch (e) {
+    return 0;
+  }
 }
 function applySelectedHighlight() {
   document.querySelectorAll('.hotspot').forEach(h => {
@@ -2892,12 +3147,26 @@ function applySelectedHighlight() {
   document.querySelectorAll('.slot-tag[data-mark-role]').forEach(t => {
     t.classList.toggle('selected', !!SELECTED_ROLE && t.dataset.markRole === SELECTED_ROLE);
   });
+  document.querySelectorAll('.roster-slot-marker[data-mark-role]').forEach(t => {
+    t.classList.toggle('selected', !!SELECTED_ROLE && t.dataset.markRole === SELECTED_ROLE);
+  });
+  document.querySelectorAll('.squad-chip[data-squad-id]').forEach(card => {
+    card.classList.toggle('has-selected-slot', !!SELECTED_ROLE && SELECTED_ROLE[0] === card.dataset.squadId);
+  });
+  document.querySelectorAll('[data-slot-confirmation]').forEach(line => {
+    const isActive = !!SELECTED_ROLE && SELECTED_ROLE[0] === line.dataset.slotConfirmation;
+    line.classList.toggle('active', isActive);
+    line.innerHTML = isActive
+      ? `<span>Selected slot</span><strong>${SELECTED_ROLE}</strong>`
+      : '';
+  });
   document.body.classList.toggle('has-selected-role', !!SELECTED_ROLE);
 }
 
 function wireSlotMarkers() {
-  document.querySelectorAll('.slot-tag[data-mark-role]').forEach(tag => {
-    tag.addEventListener('click', () => {
+  document.querySelectorAll('.slot-tag[data-mark-role], .roster-slot-marker[data-mark-role]').forEach(tag => {
+    tag.addEventListener('click', e => {
+      e.stopPropagation();
       const roleId = tag.dataset.markRole;
       // Toggle: same role tapped twice = deselect
       selectRole(SELECTED_ROLE === roleId ? null : roleId);
@@ -2919,35 +3188,81 @@ function allRoleIds() {
   return ids;
 }
 
+function renderTeamSelector() {
+  const selector = document.getElementById('roster-team-selector');
+  if (!selector) return;
+  selector.innerHTML = `
+    <div class="roster-team-copy">
+      <div class="roster-team-kicker">Step 1A · Choose Your Team</div>
+      <div class="roster-team-title">Show all squad rosters for ${ACTIVE_TEAM_INDEX === 0 ? 'Team 1' : 'Team 2'}</div>
+    </div>
+    <div class="team-filter" role="tablist" aria-label="Roster team selector">
+      ${[0, 1].map(i => `
+        <button type="button"
+          class="team-filter-btn ${i === ACTIVE_TEAM_INDEX ? 'active' : ''}"
+          data-team-filter="${i}"
+          role="tab"
+          aria-selected="${i === ACTIVE_TEAM_INDEX ? 'true' : 'false'}">
+          Team ${i + 1}
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function wireTeamSelector() {
+  document.querySelectorAll('[data-team-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const next = parseInt(btn.dataset.teamFilter, 10);
+      if (next === ACTIVE_TEAM_INDEX) return;
+      ACTIVE_TEAM_INDEX = next;
+      try { localStorage.setItem(ACTIVE_TEAM_STORAGE_KEY, String(next)); } catch (e) {}
+      renderTeamSelector();
+      renderSquadsStrip();
+      wireTeamSelector();
+      wireSquadImageEditors();
+      wireTeamCellPreview();
+      wireSlotMarkers();
+      applySelectedHighlight();
+    });
+  });
+}
+
 function renderSquadChipCompact(sq) {
+  const team = sq.teams[ACTIVE_TEAM_INDEX];
   return `
-    <div class="squad-chip ${sq.color}">
+    <div class="squad-chip ${sq.color}" data-squad-id="${sq.id}">
       <div class="chip-head">
         <span class="chip-dot"></span>
         <span>${sq.name} · ${sq.subtitle}</span>
       </div>
       <div class="chip-teams">
-        ${sq.teams.map((t, i) => `
-          <div class="team-cell">
-            <span class="team-tag">T${i+1}</span>
-            <img src="${resolveSquadImage(sq, i)}" alt="${sq.name} ${t.label}" data-squad-img="${sq.id}:${i}">
-            <div class="team-panel-edit" data-edit-zone="${sq.id}:${i}" title="Click or drop a new screenshot" role="button" tabindex="0">
-              <span class="edit-icon">⬆</span>
-              <span>Drop or click</span>
-              <span class="edit-actions">
-                <button type="button" data-edit-reset="${sq.id}:${i}">Reset</button>
-              </span>
-              <input type="file" accept="image/*" data-edit-input="${sq.id}:${i}">
-            </div>
+        <div class="team-cell" data-team-cell="${sq.id}:${ACTIVE_TEAM_INDEX}">
+          <span class="team-tag">T${ACTIVE_TEAM_INDEX + 1}</span>
+          <span class="team-roster-hint">Tap image to zoom</span>
+          <img src="${resolveSquadImage(sq, ACTIVE_TEAM_INDEX)}" alt="${sq.name} ${team.label}" data-squad-img="${sq.id}:${ACTIVE_TEAM_INDEX}">
+          <div class="roster-slot-markers" aria-label="${sq.name} visual slot markers">
+            ${sq.members.map(m => `
+              <button type="button" class="roster-slot-marker" data-mark-role="${m}" aria-label="Select ${m} from roster image">${m}</button>
+            `).join('')}
           </div>
-        `).join('')}
+          <div class="team-panel-edit" data-edit-zone="${sq.id}:${ACTIVE_TEAM_INDEX}" title="Click or drop a new screenshot" role="button" tabindex="0">
+            <span class="edit-icon">⬆</span>
+            <span>Drop or click</span>
+            <span class="edit-actions">
+              <button type="button" data-edit-reset="${sq.id}:${ACTIVE_TEAM_INDEX}">Reset</button>
+            </span>
+            <input type="file" accept="image/*" data-edit-input="${sq.id}:${ACTIVE_TEAM_INDEX}">
+          </div>
+        </div>
       </div>
-      <div class="chip-slots-label">Tap your slot to mark it on the map</div>
+      <div class="chip-slots-label">1. Find your name in the roster · 2. Tap your slot</div>
       <div class="chip-slots" aria-label="${sq.name} slot positions">
         ${sq.members.map(m => `
-          <button type="button" class="slot-tag" data-mark-role="${m}" aria-label="Mark ${m} on the map">${m}</button>
+          <button type="button" class="slot-tag" data-mark-role="${m}" aria-label="Select ${m} and show it on the map">${m}</button>
         `).join('')}
       </div>
+      <div class="slot-confirmation" data-slot-confirmation="${sq.id}" aria-live="polite"></div>
     </div>
   `;
 }
@@ -3135,12 +3450,14 @@ function closeTaskSheet() {
 // ── ADMIN BUTTONS ──
 const editToggle = document.getElementById('edit-squads-toggle');
 const editPositionsToggle = document.getElementById('edit-positions-toggle');
+const saveBtn = document.getElementById('save-squads-btn');
 const exportBtn = document.getElementById('export-squads-btn');
 const clearBtn = document.getElementById('clear-squads-btn');
 const IS_ADMIN = new URLSearchParams(location.search).has('admin');
 if (IS_ADMIN) {
   if (editToggle) editToggle.hidden = false;
   if (editPositionsToggle) editPositionsToggle.hidden = false;
+  if (saveBtn) saveBtn.hidden = false;
   if (exportBtn) exportBtn.hidden = false;
 }
 if (editToggle) {
@@ -3164,6 +3481,7 @@ if (editPositionsToggle) {
     }
   });
 }
+if (saveBtn) saveBtn.addEventListener('click', () => saveSquadsJsonDirect());
 if (exportBtn) exportBtn.addEventListener('click', exportSquadImagesJson);
 if (clearBtn) clearBtn.addEventListener('click', clearLocalSquadEdits);
 
@@ -3271,8 +3589,10 @@ function wireTeamCellPreview() {
 // ── INIT ──
 async function initBoard() {
   SELECTED_ROLE = getStoredSelectedRole();
+  renderTeamSelector();
   renderSquadsStrip();
   renderBoard();
+  wireTeamSelector();
   wireSquadImageEditors();
   wireTeamCellPreview();
   wireSlotMarkers();
